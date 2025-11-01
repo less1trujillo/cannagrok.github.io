@@ -1,250 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>CANNAGROK AI Assistant (FlowerForm)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    /* 1. Base Styles and Professional Look */
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background: #f0f4f8; /* Light professional background */
-      margin: 0; 
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-    }
-    .chat-container { 
-      max-width: 650px; 
-      width: 95%;
-      background: white; 
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-      border-radius: 16px; 
-      margin: 20px auto;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    header {
-      background: #1B5E20; /* Dark, elegant green */
-      color: white;
-      padding: 15px;
-      text-align: center;
-    }
-    header h1 { margin: 0; font-size: 1.8em; font-weight: 700; }
-    header p { margin: 4px 0 0; font-size: 0.85em; opacity: 0.8; }
-
-    /* 2. Chat Window and Message Bubbles */
-    #messages { 
-      flex-grow: 1; 
-      padding: 20px; 
-      overflow-y: auto;
-      height: 60vh; 
-      background: #ffffff;
-      line-height: 1.4;
-    }
-    .msg { 
-      padding: 10px 15px; 
-      border-radius: 20px; 
-      margin: 10px 0; 
-      max-width: 85%; 
-      word-wrap: break-word;
-      display: block; 
-    }
-    .user { 
-      background: #388E3C; /* User green */
-      color: white; 
-      margin-left: auto; 
-      border-bottom-right-radius: 5px;
-      text-align: right;
-    }
-    .grok { 
-      background: #eceff1; /* Light grey for Grok */
-      color: #212121; 
-      border-left: 3px solid #4CAF50; /* Green bar for AI distinction */
-      border-bottom-left-radius: 5px;
-      text-align: left;
-    }
-    
-    /* 3. Input and Button Area */
-    .input-area {
-        display: flex;
-        padding: 15px 20px;
-        border-top: 1px solid #eee;
-        background: #f9f9f9;
-        gap: 10px;
-    }
-    #input { 
-      flex-grow: 1; 
-      padding: 12px; 
-      border: 1px solid #ccc; 
-      border-radius: 24px;
-      font-size: 15px;
-    }
-    button { 
-      background: #388E3C;
-      color: white; 
-      border: none; 
-      padding: 12px 18px; 
-      border-radius: 24px; 
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover { background: #1B5E20; }
-    
-    /* 4. Footer and Premium Link */
-    .footer-links {
-        padding: 10px 20px;
-        text-align: center;
-        font-size: 0.9em;
-        background: #e0e0e0;
-    }
-    .footer-links a {
-        color: #FFC107; /* Amber/Gold for Premium */
-        text-decoration: none;
-        font-weight: 700;
-    }
-    .grok a {
-        color: #1B5E20;
-        text-decoration: underline;
-    }
-  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CANNAMINIAI Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      /* For a better scrollbar on webkit browsers */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0D1B2A;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1B4965;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4B7E9F;
+      }
+    </style>
+    <!-- Load React and ReactDOM from CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <!-- Load Babel for JSX transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body>
-  <div class="chat-container">
-    <header>
-      <h1>CANNAGROK 🌿</h1>
-      <p>AI + Data for FlowerForm. 21+ in legal jurisdictions only.</p>
-    </header>
+  <body class="bg-[#0D1B2A]">
+    <div id="root"></div>
+    <script type="text/babel">
+      // React and ReactDOM are now available globally, no need to import.
+      const { useState, useEffect, useRef } = React;
 
-    <div id="messages"></div>
-    
-    <div class="input-area">
-      <input type="text" id="input" placeholder="Ask about FlowerForm, dosage, or legality..." />
-      <button onclick="send()">Send</button>
-    </div>
-    
-    <div class="footer-links">
-      <a href="https://paypal.me/cannagrok/4.99" target="_blank">⭐ PREMIUM $4.99/mo | Unlock Advanced Tools</a>
-    </div>
-  </div>
- <script>
-    // --- MONETIZATION LINKS (UPDATE THESE WITH YOUR ACTUAL LINKS) ---
-    const PAYPAL_LINK = "YOUR_PAYPAL_LINK_HERE"; // A. Example: https://paypal.me/cannagrok/4.99
-    const PREMIUM_SALES_PAGE = "YOUR_CARRD_PREMIUM_SALES_LINK_HERE"; // B. Carrd page where you explain the value
-    const AFFILIATE_HUB_LINK = "YOUR_CARRD_AFFILIATE_HUB_LINK_HERE"; // C. Carrd page with affiliate buttons
-    const GITHUB_RAW_CSV = "YOUR_GITHUB_RAW_CSV_LINK_HERE"; // D. The direct RAW link to terpenome_map.csv
+      // --- CONSTANTS ---
+      const SALES_LINK = 'https://paypal.me/cannagrok/4.99';
+      const AFFILIATE_LINK = 'https://tucarrd.com/grok-verified-alliances';
+      const GITHUB_RAW_CSV_LINK = "https://raw.githubusercontent.com/less1trujillo/cannagrok.github.io/main/data/terpenome_map.csv";
 
-    const messages = document.getElementById('messages');
-    // 
-  
-    
-    // ** THE CORE LOGIC: ADVANCED FREEMIUM FUNNEL **
-    let userState = {}; 
+      const PREMIUM_PITCH_MESSAGE = `I apologize. That query requires CANNAMINIAI's live reasoning engine for precision legal analysis and personalized titration protocols. The data complexity exceeds our Open Source model's capacity.\n\nUPGRADE NOW to unlock full Gemini power and secure your Scientific Protocol.\n\n<a href='${SALES_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>UNLOCK CANNAMINIAI PREMIUM - $4.99/mo</a>`;
+      const AFFILIATE_PITCH_MESSAGE = `For verified, compliant accessories, visit our Educational Alliances Hub.\n\n<a href='${AFFILIATE_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>View Verified Alliances</a>`;
+      const MAP_DOWNLOAD_MESSAGE = `Here is the direct download link for the free Terpenome Map CSV:\n\n<a href='${GITHUB_RAW_CSV_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>Download Terpenome_Map.csv</a>`;
 
-    function addMsg(text, sender) {
-      const div = document.createElement('div');
-      div.className = 'msg ' + (sender ? 'user' : 'grok');
-      // Use <a> tag for links and <br> for new lines
-      div.innerHTML = text.replace(/\n/g, '<br>'); 
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    }
+      // --- CHATBOT SERVICE LOGIC ---
+      const premiumKeywords = ['titration', 'federal law', 'interstate', 'personalized dose', 'custom blend', 'legal advice'];
+      const affiliateKeywords = ['vape', 'oil', 'anxiety', 'accessories', 'cbd', 'buy', 'shop'];
+      const mapKeywords = ['map', 'terpenome', 'csv', 'download'];
 
-  function grokResponse(msg, userState) {
-        msg = msg.toLowerCase();
-        
-        // 1. **TERPENOME MAP PROMOTION (FREE EDUCATIONAL ASSET)**
-        if (msg.includes('terpene') || msg.includes('aroma') || msg.includes('smell') || msg.includes('science')) {
-            return `Understanding **FlowerForm** quality starts with data. Myrcene, for example, is linked to relaxation. To conduct your own research, we offer the raw data.\n\n**FREE EDUCATIONAL ASSET:** Download the **'Canna Grok Terpenome Map'** (CSV/JSON) with full chemical profiles.\n<a href="${GITHUB_RAW_CSV}" target="_blank">Download RAW Data for Free</a>`; 
-        }
+      const knowledgeBase = {
+        'myrcene': "**Myrcene** is one of the most common terpenes found in cannabis. \nIt's known for its earthy, musky notes, reminiscent of cloves. Some believe it promotes calming effects.",
+        'limonene': "**Limonene** is a terpene with a distinct citrusy aroma, like lemons or oranges. \nIt's often associated with mood elevation and stress relief.",
+        'linalool': "**Linalool** has a floral, spicy scent similar to lavender. \nIt is commonly associated with relaxing and sedative properties.",
+        'caryophyllene': "**Beta-caryophyllene** is unique because it's the only terpene known to also act as a cannabinoid. \nIt has a peppery, spicy aroma and may have anti-inflammatory benefits.",
+        'pinene': "**Pinene**, as the name suggests, has a strong scent of pine trees. \nIt is associated with alertness and memory retention.",
+        'dosing': "A standard starting dose for cannabis edibles is typically **5mg of THC**. \nIt's crucial to 'start low and go slow,' waiting at least 2 hours before considering an additional dose.",
+        'edible onset': "Edibles can take anywhere from **30 minutes to 2 hours** to take effect. \nFactors like metabolism and stomach contents can influence onset time.",
+        'compliance': "In most U.S. states with legal cannabis, the personal possession limit for adults is **1 ounce (approx. 28 grams)** of cannabis flower.",
+        'medical vs recreational': "**Medical cannabis** requires a doctor's recommendation for specific conditions, while **recreational cannabis** is available for adults (usually 21+) in legal states.",
+        'quality': "High-quality FlowerForm is characterized by a potent aroma, visible **trichomes** (the crystal-like coating), and a healthy, vibrant color. It should feel slightly sticky, not overly dry or wet.",
+        'trichomes': "**Trichomes** are the small, crystal-like glands on the surface of cannabis flowers that produce cannabinoids and terpenes. A high density of trichomes often indicates higher potency.",
+        'curing': "**Curing** is the process of slowly drying and aging cannabis flowers after harvest. \nProper curing develops the flower's flavor and aroma while preserving cannabinoids and terpenes.",
+        'sativa vs indica': "Traditionally, **Sativa** strains were associated with uplifting, energetic effects, while **Indica** strains were linked to relaxation and sedation. \nHowever, modern science suggests that terpene and cannabinoid profiles are more important predictors of effects.",
+        'cbd vs thc': "**THC (Tetrahydrocannabinol)** is the primary psychoactive compound in cannabis. \n**CBD (Cannabidiol)** is non-psychoactive and is studied for its potential therapeutic benefits, such as reducing anxiety and inflammation.",
+        'entourage effect': "The **Entourage Effect** is the theory that various cannabis compounds (cannabinoids, terpenes) work together synergistically to produce a greater effect than any single compound on its own.",
+        'help': "You can ask me about topics like: \n- Basic Terpenes (Myrcene, Limonene) \n- Standard Dosing \n- Basic State Compliance \n- FlowerForm Quality \n- Download the Terpenome Map"
+      };
 
-        // 2. **LEGALITY/STATE CHECK (PREMIUM: Compliance Navigator)**
-        if (msg.includes('legal') || msg.includes('state') || msg.includes('law') || msg.includes('travel')) {
-            if (userState.state) {
-                // If state is already known, pitch the premium tool
-                return `I confirmed your jurisdiction: **${userState.state}**.\n\nPossession limits are just the start. You need to understand **transportation, federal land, and crossing state lines** to stay safe. \n\nUnlock the **Canna Grok Compliance Navigator** (The Legal Matrix) for only $4.99/mo.\n<a href="${PREMIUM_SALES_PAGE}" target="_blank">Access the Legal Matrix Now</a>`;
+      const defaultResponse = "I'm sorry, I don't have information on that topic. My knowledge is limited to basic terpenes, dosing, compliance, and quality. \nFor more complex questions, consider our Premium service.";
+
+      const processMessage = async (input) => {
+        const lowercasedInput = input.toLowerCase();
+
+        return new Promise(resolve => {
+          setTimeout(() => {
+            if (premiumKeywords.some(keyword => lowercasedInput.includes(keyword))) {
+              resolve(PREMIUM_PITCH_MESSAGE);
+              return;
             }
-            userState.awaitingState = true;
-            return `Legality is complex. For precise, current info (+21), please tell me **which US State you are in** (e.g., California, Texas)?`;
-        }
-
-        // 3. **PRODUCT/DOSAGE (PREMIUM: Doser PRO - The Scientific Protocol)**
-        if (msg.includes('flowerform') || msg.includes('dose') || msg.includes('potency') || msg.includes('dosing')) {
-            let strain = msg.includes('sleep') ? 'Granddaddy Purple' : 'FlowerForm Signature';
-            return `**FlowerForm Research:** ${strain} is scientifically formulated. **Standard Starting Dose:** 5mg THC.\n\nTo move beyond the basic dose and get a personalized **Scientific Protocol** (based on your profile and terpene analysis), unlock the **'FlowerForm Doser PRO'** (Premium).\n<a href="${PREMIUM_SALES_PAGE}" target="_blank">Unlock the Scientific Protocol $4.99/mo</a>`;
-        }
-
-        // 4. **AFFILIATE PROMOTION (Educational CBD / Legal Substitute)**
-        if (msg.includes('cbd') || msg.includes('anxiety') || msg.includes('substitute')) {
-            return `CBD is a legal substitute in many areas, excellent for anxiety and wellness. **CannaGrok** partners with brands that prioritize quality and compliance.\n\n**Educational Recommendation:** We recommend looking into **Verified CBD Suppliers** for quality assurance.\n<a href="${AFFILIATE_HUB_LINK}" target="_blank">View Verified Alliances and Discounts</a>`;
-        }
-
-        // 5. **STATE ANSWER HANDLING (Follow-up to Legality Question)**
-        if (userState.awaitingState) {
-            userState.state = msg.toUpperCase().slice(0, 15); 
-            userState.awaitingState = false;
-            return `Thank you! I have cross-referenced data for **${userState.state}**.\n\nThis information is highly dynamic. To confirm detailed transport regulations and avoid risk, you need our full **Compliance Navigator** (Premium).\n<a href="${PREMIUM_SALES_PAGE}" target="_blank">Unlock Your Legal Safety $4.99/mo</a>`;
-        }
-        
-        // 6. **DEFAULT MESSAGE**
-        return `I am **Canna Grok**, your educational AI assistant. I provide data on **FlowerForm** dosing, legal compliance, and scientific profiles.\n\n*Try asking:* "What are the rules for my state?" or "What dose should I take?"`;
-    }
-        }
-
-        // 2. **LEGALITY/STATE CHECK (PREMIUM: Compliance Navigator)**
-        if (msg.includes('legal') || msg.includes('state') || msg.includes('law')) {
-            if (userState.state) {
-                return `Confirmed! For **${userState.state}**, possession is limited (typically 1oz max). \n\nDo you need the full **Travel & Transport Checklist** for **${userState.state}**? Unlock the **Canna Grok Compliance Navigator** (Premium). [Pay $4.99 here]`;
+            if (affiliateKeywords.some(keyword => lowercasedInput.includes(keyword))) {
+              resolve(AFFILIATE_PITCH_MESSAGE);
+              return;
             }
-            userState.awaitingState = true;
-            return `Legality varies greatly. For precise, current info (+21), please tell me **which US State you are in** (e.g., California, Texas, etc.)?`;
-        }
-
-        // 3. **PRODUCT/DOSAGE (PREMIUM: Doser PRO)**
-        if (msg.includes('flowerform') || msg.includes('dose') || msg.includes('potency')) {
-            let strain = msg.includes('sleep') ? 'Granddaddy Purple' : 'FlowerForm Signature';
-            return `**FlowerForm:** ${strain} is our top-rated product, guaranteed by **CannaGrok**.\n**Basic Suggested Dose:** Start with 5mg of THC.\n\nTo calculate your **exact, personalized dose** and optimal timing, unlock the **'FlowerForm Doser PRO'** (Premium). [Access for $4.99]`;
-        }
-
-        // 4. **AFFILIATE PROMOTION (CBD)**
-        if (msg.includes('cbd') || msg.includes('anxiety')) {
-            return `CBD is excellent for wellness. We recommend looking into **Charlotte's Web 20:1** oil (great for relaxation).\n\n[Get 20% OFF at CBDistillery here] (Your affiliate link)\n\nWant the best way to integrate CBD into your routine? Ask about our **Integration Guide (Premium)**.`;
-        }
-
-        // 5. **STATE ANSWER HANDLING**
-        if (userState.awaitingState) {
-            userState.state = msg.toUpperCase().slice(0, 15); 
-            userState.awaitingState = false;
-            return `Thank you! Got it, you are asking about **${userState.state}**.\n\nTo confirm detailed transport regulations and compliance, you need our full database (Premium). Do you want the **Canna Grok Compliance Navigator**? [Pay $4.99 here]`;
-        }
-        
-        // 6. **DEFAULT MESSAGE**
-        return `I am **Canna Grok**. I can help you with questions about **FlowerForm**, legality (+21), and dosing.\n\n*Try asking:* "What is the terpene Myrcene?" or "What dose of FlowerForm do you recommend?"`;
-    }
-
-    // --- INTERFACE LOGIC ---
-    function send() {
-      const text = input.value.trim();
-      if (!text) return;
-      addMsg(text, true); // User message
-      input.value = '';
+            if (mapKeywords.some(keyword => lowercasedInput.includes(keyword))) {
+              resolve(MAP_DOWNLOAD_MESSAGE);
+              return;
+            }
+            for (const key in knowledgeBase) {
+              if (lowercasedInput.includes(key)) {
+                resolve(knowledgeBase[key]);
+                return;
+              }
+            }
+            resolve(defaultResponse);
+          }, 1000 + Math.random() * 500); // Simulate AI thinking time
+        });
+      };
       
-      // Simulate AI processing time for better UX
-      addMsg('Canna Grok is processing...', false); 
+      // --- COMPONENTS ---
+      const ChatMessage = ({ message }) => {
+        const isUser = message.author === 'user';
+        const formatMessage = (text) => {
+          let formattedText = text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');
+          formattedText = formattedText.replace(/\\n/g, '<br />');
+          return formattedText;
+        };
+
+        const baseClasses = "max-w-md md:max-w-lg lg:max-w-xl p-4 rounded-xl shadow-md text-sm md:text-base leading-relaxed break-words";
+        const userClasses = `bg-[#4B7E9F] text-white self-end rounded-br-none`;
+        const aiClasses = `bg-[#EFEFEF] text-gray-800 self-start rounded-bl-none border-l-4 border-[#FFD700]`;
+
+        return (
+          <div className={`my-2 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+            <div 
+              className={`${baseClasses} ${isUser ? userClasses : aiClasses}`}
+              dangerouslySetInnerHTML={{ __html: formatMessage(message.text) }}
+            />
+          </div>
+        );
+      };
+
+      const ChatInput = ({ onSend, isLoading }) => {
+        const [inputValue, setInputValue] = useState('');
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          if (inputValue.trim() && !isLoading) {
+            onSend(inputValue.trim());
+            setInputValue('');
+          }
+        };
+
+        return (
+          <form onSubmit={handleSubmit} className="p-4 bg-[#0D1B2A] border-t border-[#1B4965]">
+            <div className="flex items-center space-x-3 bg-[#1B4965] rounded-full p-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask about terpenes, dosing..."
+                className="flex-grow bg-transparent text-white placeholder-gray-400 focus:outline-none px-4"
+                disabled={isLoading}
+              />
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="bg-[#FFD700] text-[#0D1B2A] rounded-full p-2 w-10 h-10 flex items-center justify-center font-bold hover:bg-yellow-300 transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        );
+      };
       
-      setTimeout(() => {
-        messages.lastChild.remove(); // Remove "Processing..." message
-        addMsg(grokResponse(text, userState), false); // Send advanced response
-      }, 1000); // 1 second delay
-    }
+      const TypingIndicator = () => {
+        return (
+          <div className="flex items-center space-x-1 p-4">
+              <div className="bg-[#EFEFEF] rounded-full p-3 shadow-md border-l-4 border-[#FFD700]">
+                  <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse"></div>
+                      <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse [animation-delay:0.2s]"></div>
+                      <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse [animation-delay:0.4s]"></div>
+                  </div>
+              </div>
+          </div>
+        );
+      };
 
-    input.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
+      // --- MAIN APP COMPONENT ---
+      const App = () => {
+        const [messages, setMessages] = useState([
+          {
+            id: 'init',
+            author: 'ai',
+            text: "Welcome to **CANNAMINIAI**. \nI can provide educational information on basic cannabis science. Ask me about terpenes, dosing, or quality. For complex legal and medical queries, an upgrade to our Premium AI is required. Type 'help' for topics.",
+          },
+        ]);
+        const [isLoading, setIsLoading] = useState(false);
+        const messagesEndRef = useRef(null);
 
-    // Initial Welcome Message
-    addMsg('Welcome to CANNAGROK! Ask about FlowerForm, dosage, or legality. 🌿', false);
-  </script>
-</body>
-</html>   
+        const scrollToBottom = () => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        useEffect(() => {
+          scrollToBottom();
+        }, [messages, isLoading]);
+
+        const handleSend = async (userMessage) => {
+          const newUserMessage = {
+            id: Date.now().toString(),
+            author: 'user',
+            text: userMessage,
+          };
+          setMessages(prev => [...prev, newUserMessage]);
+
+          setIsLoading(true);
+
+          const aiResponseText = await processMessage(userMessage);
+
+          const newAiMessage = {
+            id: (Date.now() + 1).toString(),
+            author: 'ai',
+            text: aiResponseText,
+          };
+          
+          setMessages(prev => [...prev, newAiMessage]);
+          setIsLoading(false);
+        };
+
+        return (
+          <div className="bg-[#0D1B2A] text-white flex flex-col h-screen">
+            <header className="bg-[#1B4965] p-4 text-center shadow-lg">
+              <h1 className="text-xl md:text-2xl font-bold tracking-wider text-[#FFD700]">
+                CANNAMINI<span className="text-white">AI</span>
+              </h1>
+              <p className="text-xs text-gray-300">Open Source Educational Model</p>
+            </header>
+            
+            <main className="flex-grow p-2 md:p-4 overflow-y-auto">
+              <div className="max-w-4xl mx-auto w-full">
+                {messages.map(msg => (
+                  <ChatMessage key={msg.id} message={msg} />
+                ))}
+                {isLoading && <TypingIndicator />}
+                <div ref={messagesEndRef} />
+              </div>
+            </main>
+
+            <footer className="sticky bottom-0 left-0 right-0">
+              <div className="max-w-4xl mx-auto w-full">
+                <ChatInput onSend={handleSend} isLoading={isLoading} />
+              </div>
+            </footer>
+          </div>
+        );
+      };
+
+      // --- RENDER THE APP ---
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Could not find root element to mount to");
+      }
+
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
