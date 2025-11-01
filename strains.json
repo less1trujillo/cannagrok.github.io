@@ -1,0 +1,84 @@
+{
+  "strains": [
+    {
+      "name": "Blue Dream",
+      "thca": "19.8%",
+      "type": "Hybrid",
+      "effects": "Balanced, creative focus",
+      "legal": "All 50 states (THCA hemp)",
+      "buy": "https://dutchie.com?aff=cannagrok"
+    },
+    {
+      "name": "Jealousy",
+      "thca": "21%",
+      "type": "Hybrid",
+      "effects": "Euphoric lift, relaxation",
+      "legal": "CA, CO, NV (recreational)",
+      "buy": "https://weedmaps.com?aff=cannagrok"
+    },
+    {
+      "name": "White Runtz",
+      "thca": "31.55%",
+      "type": "Hybrid",
+      "effects": "Tingly, euphoric",
+      "legal": "All 50 states (THCA hemp)",
+      "buy": "https://dutchie.com?aff=cannagrok"
+    },
+    {
+      "name": "Gorilla Glue #4",
+      "thca": "22%",
+      "type": "Hybrid",
+      "effects": "Potent, stress relief",
+      "legal": "OR, WA, IL",
+      "buy": "https://weedmaps.com?aff=cannagrok"
+    },
+    {
+      "name": "Gelato 41",
+      "thca": "20%",
+      "type": "Hybrid",
+      "effects": "Creative buzz, sweet",
+      "legal": "NY, MI, MA",
+      "buy": "https://dutchie.com?aff=cannagrok"
+    },
+    {
+      "name": "Super Lemon Haze",
+      "thca": "18%",
+      "type": "Sativa",
+      "effects": "Uplifting, citrus",
+      "legal": "All 50 states (THCA hemp)",
+      "buy": "https://weedmaps.com?aff=cannagrok"
+    },
+    {
+      "name": "Cheetah Piss",
+      "thca": "23%",
+      "type": "Hybrid",
+      "effects": "Energetic, tropical",
+      "legal": "AZ, NJ",
+      "buy": "https://dutchie.com?aff=cannagrok"
+    },
+    {
+      "name": "Durban Poison",
+      "thca": "19%",
+      "type": "Sativa",
+      "effects": "Pure focus, earthy",
+      "legal": "All 50 states (THCA hemp)",
+      "buy": "https://weedmaps.com?aff=cannagrok"
+    },
+    {
+      "name": "Snow Caps",
+      "thca": "25%",
+      "type": "Indica",
+      "effects": "Relaxing, nighttime",
+      "legal": "CA, CO",
+      "buy": "https://dutchie.com?aff=cannagrok"
+    },
+    {
+      "name": "Space Junkie",
+      "thca": "24%",
+      "type": "Sativa",
+      "effects": "Uplifting, cosmic",
+      "legal": "All 50 states (THCA hemp)",
+      "buy": "https://weedmaps.com?aff=cannagrok"
+    }
+  ]
+}
