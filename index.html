@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CANNAMINIAI Chatbot</title>
+    <title>CannaGrok Chatbot</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
@@ -42,7 +42,7 @@
       const AFFILIATE_LINK = 'https://tucarrd.com/grok-verified-alliances';
       const GITHUB_RAW_CSV_LINK = "https://raw.githubusercontent.com/less1trujillo/cannagrok.github.io/main/data/terpenome_map.csv";
 
-      const PREMIUM_PITCH_MESSAGE = `I apologize. That query requires CANNAMINIAI's live reasoning engine for precision legal analysis and personalized titration protocols. The data complexity exceeds our Open Source model's capacity.\n\nUPGRADE NOW to unlock full Gemini power and secure your Scientific Protocol.\n\n<a href='${SALES_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>UNLOCK CANNAMINIAI PREMIUM - $4.99/mo</a>`;
+      const PREMIUM_PITCH_MESSAGE = `I apologize. That query requires CannaGrok's live reasoning engine for precision legal analysis and personalized titration protocols. The data complexity exceeds our Open Source model's capacity.\n\nUPGRADE NOW to unlock full Gemini power and secure your Scientific Protocol.\n\n<a href='${SALES_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>UNLOCK CannaGrok PREMIUM - $4.99/mo</a>`;
       const AFFILIATE_PITCH_MESSAGE = `For verified, compliant accessories, visit our Educational Alliances Hub.\n\n<a href='${AFFILIATE_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>View Verified Alliances</a>`;
       const MAP_DOWNLOAD_MESSAGE = `Here is the direct download link for the free Terpenome Map CSV:\n\n<a href='${GITHUB_RAW_CSV_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>Download Terpenome_Map.csv</a>`;
 
@@ -104,7 +104,7 @@
       const ChatMessage = ({ message }) => {
         const isUser = message.author === 'user';
         const formatMessage = (text) => {
-          let formattedText = text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');
+          let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
           formattedText = formattedText.replace(/\\n/g, '<br />');
           return formattedText;
         };
@@ -179,7 +179,7 @@
           {
             id: 'init',
             author: 'ai',
-            text: "Welcome to **CANNAMINIAI**. \nI can provide educational information on basic cannabis science. Ask me about terpenes, dosing, or quality. For complex legal and medical queries, an upgrade to our Premium AI is required. Type 'help' for topics.",
+            text: "Welcome to **CannaGrok**. \nI can provide educational information on basic cannabis science. Ask me about terpenes, dosing, or quality. For complex legal and medical queries, an upgrade to our Premium AI is required. Type 'help' for topics.",
           },
         ]);
         const [isLoading, setIsLoading] = useState(false);
@@ -219,7 +219,7 @@
           <div className="bg-[#0D1B2A] text-white flex flex-col h-screen">
             <header className="bg-[#1B4965] p-4 text-center shadow-lg">
               <h1 className="text-xl md:text-2xl font-bold tracking-wider text-[#FFD700]">
-                CANNAMINI<span className="text-white">AI</span>
+                Canna<span className="text-white">Grok</span>
               </h1>
               <p className="text-xs text-gray-300">Open Source Educational Model</p>
             </header>
