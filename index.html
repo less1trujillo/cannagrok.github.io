@@ -153,15 +153,45 @@
       messages.scrollTop = messages.scrollHeight;
     }
 
-    function grokResponse(msg, userState) {
+  function grokResponse(msg, userState) {
         msg = msg.toLowerCase();
         
-        // 1. **TERPENOME MAP PROMOTION (FREE DATA ASSET)**
+        // 1. **TERPENOME MAP PROMOTION (FREE EDUCATIONAL ASSET)**
         if (msg.includes('terpene') || msg.includes('aroma') || msg.includes('smell') || msg.includes('science')) {
-            // Note: This link MUST be replaced with your actual GitHub RAW link in Step 3
-            const githubLink = https://raw.githubusercontent.com/less1trujillo/cannagrok.github.io/refs/heads/main/data/terpenome_map.csv
-            
-            return `The key to **FlowerForm** quality is terpenes! To understand the science behind effects, download our free data asset.\n\n**FREE DOWNLOAD:** The **'Canna Grok Terpenome Map'** (CSV/JSON) is on our GitHub.\n<a href="${githubLink}" target="_blank">Download the RAW Data Now</a>`; 
+            return `Understanding **FlowerForm** quality starts with data. Myrcene, for example, is linked to relaxation. To conduct your own research, we offer the raw data.\n\n**FREE EDUCATIONAL ASSET:** Download the **'Canna Grok Terpenome Map'** (CSV/JSON) with full chemical profiles.\n<a href="${GITHUB_RAW_CSV}" target="_blank">Download RAW Data for Free</a>`; 
+        }
+
+        // 2. **LEGALITY/STATE CHECK (PREMIUM: Compliance Navigator)**
+        if (msg.includes('legal') || msg.includes('state') || msg.includes('law') || msg.includes('travel')) {
+            if (userState.state) {
+                // If state is already known, pitch the premium tool
+                return `I confirmed your jurisdiction: **${userState.state}**.\n\nPossession limits are just the start. You need to understand **transportation, federal land, and crossing state lines** to stay safe. \n\nUnlock the **Canna Grok Compliance Navigator** (The Legal Matrix) for only $4.99/mo.\n<a href="${PREMIUM_SALES_PAGE}" target="_blank">Access the Legal Matrix Now</a>`;
+            }
+            userState.awaitingState = true;
+            return `Legality is complex. For precise, current info (+21), please tell me **which US State you are in** (e.g., California, Texas)?`;
+        }
+
+        // 3. **PRODUCT/DOSAGE (PREMIUM: Doser PRO - The Scientific Protocol)**
+        if (msg.includes('flowerform') || msg.includes('dose') || msg.includes('potency') || msg.includes('dosing')) {
+            let strain = msg.includes('sleep') ? 'Granddaddy Purple' : 'FlowerForm Signature';
+            return `**FlowerForm Research:** ${strain} is scientifically formulated. **Standard Starting Dose:** 5mg THC.\n\nTo move beyond the basic dose and get a personalized **Scientific Protocol** (based on your profile and terpene analysis), unlock the **'FlowerForm Doser PRO'** (Premium).\n<a href="${PREMIUM_SALES_PAGE}" target="_blank">Unlock the Scientific Protocol $4.99/mo</a>`;
+        }
+
+        // 4. **AFFILIATE PROMOTION (Educational CBD / Legal Substitute)**
+        if (msg.includes('cbd') || msg.includes('anxiety') || msg.includes('substitute')) {
+            return `CBD is a legal substitute in many areas, excellent for anxiety and wellness. **CannaGrok** partners with brands that prioritize quality and compliance.\n\n**Educational Recommendation:** We recommend looking into **Verified CBD Suppliers** for quality assurance.\n<a href="${AFFILIATE_HUB_LINK}" target="_blank">View Verified Alliances and Discounts</a>`;
+        }
+
+        // 5. **STATE ANSWER HANDLING (Follow-up to Legality Question)**
+        if (userState.awaitingState) {
+            userState.state = msg.toUpperCase().slice(0, 15); 
+            userState.awaitingState = false;
+            return `Thank you! I have cross-referenced data for **${userState.state}**.\n\nThis information is highly dynamic. To confirm detailed transport regulations and avoid risk, you need our full **Compliance Navigator** (Premium).\n<a href="${PREMIUM_SALES_PAGE}" target="_blank">Unlock Your Legal Safety $4.99/mo</a>`;
+        }
+        
+        // 6. **DEFAULT MESSAGE**
+        return `I am **Canna Grok**, your educational AI assistant. I provide data on **FlowerForm** dosing, legal compliance, and scientific profiles.\n\n*Try asking:* "What are the rules for my state?" or "What dose should I take?"`;
+    }
         }
 
         // 2. **LEGALITY/STATE CHECK (PREMIUM: Compliance Navigator)**
