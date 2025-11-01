@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Wuelo - Asistente CANNAGROK (Flowermaniacs)</title>
+  <title>CANNAGROK AI Assistant (FlowerForm)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Diseño Moderno y Profesional */
+    /* 1. Base Styles and Professional Look */
     body { 
       font-family: 'Inter', sans-serif; 
-      background: #f0f4f8; /* Fondo profesional */
+      background: #f0f4f8; /* Light professional background */
       margin: 0; 
       display: flex;
       justify-content: center;
@@ -19,7 +19,7 @@
       max-width: 650px; 
       width: 95%;
       background: white; 
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
       border-radius: 16px; 
       margin: 20px auto;
       display: flex;
@@ -27,7 +27,7 @@
       overflow: hidden;
     }
     header {
-      background: #1B5E20; /* Verde oscuro elegante */
+      background: #1B5E20; /* Dark, elegant green */
       color: white;
       padding: 15px;
       text-align: center;
@@ -35,7 +35,7 @@
     header h1 { margin: 0; font-size: 1.8em; font-weight: 700; }
     header p { margin: 4px 0 0; font-size: 0.85em; opacity: 0.8; }
 
-    /* Cuerpo del Chat */
+    /* 2. Chat Window and Message Bubbles */
     #messages { 
       flex-grow: 1; 
       padding: 20px; 
@@ -50,24 +50,24 @@
       margin: 10px 0; 
       max-width: 85%; 
       word-wrap: break-word;
-      display: block; /* Para que ocupen toda la línea y se alineen bien */
+      display: block; 
     }
     .user { 
-      background: #388E3C; 
+      background: #388E3C; /* User green */
       color: white; 
       margin-left: auto; 
       border-bottom-right-radius: 5px;
       text-align: right;
     }
     .grok { 
-      background: #eceff1; 
+      background: #eceff1; /* Light grey for Grok */
       color: #212121; 
-      border-left: 3px solid #4CAF50; /* Barra para distinción de IA */
+      border-left: 3px solid #4CAF50; /* Green bar for AI distinction */
       border-bottom-left-radius: 5px;
       text-align: left;
     }
     
-    /* Entrada y Botones */
+    /* 3. Input and Button Area */
     .input-area {
         display: flex;
         padding: 15px 20px;
@@ -94,7 +94,7 @@
     }
     button:hover { background: #1B5E20; }
     
-    /* Premium Button (Fijo en Footer) */
+    /* 4. Footer and Premium Link */
     .footer-links {
         padding: 10px 20px;
         text-align: center;
@@ -102,11 +102,10 @@
         background: #e0e0e0;
     }
     .footer-links a {
-        color: #FF9800; /* Naranja para llamar la atención del Premium */
+        color: #FFC107; /* Amber/Gold for Premium */
         text-decoration: none;
         font-weight: 700;
     }
-    /* Estilo para los enlaces de afiliado dentro del chat */
     .grok a {
         color: #1B5E20;
         text-decoration: underline;
@@ -117,18 +116,18 @@
   <div class="chat-container">
     <header>
       <h1>CANNAGROK 🌿</h1>
-      <p>IA + Data para FlowerForm. Solo +21 en jurisdicciones legales.</p>
+      <p>AI + Data for FlowerForm. 21+ in legal jurisdictions only.</p>
     </header>
 
     <div id="messages"></div>
     
     <div class="input-area">
-      <input type="text" id="input" placeholder="Pregunta sobre FlowerForm, dosis o legalidad..." />
-      <button onclick="send()">Enviar</button>
+      <input type="text" id="input" placeholder="Ask about FlowerForm, dosage, or legality..." />
+      <button onclick="send()">Send</button>
     </div>
     
     <div class="footer-links">
-      <a href="https://paypal.me/cannagrok/4.99" target="_blank">⭐ PREMIUM $4.99/mes</a>
+      <a href="https://paypal.me/cannagrok/4.99" target="_blank">⭐ PREMIUM $4.99/mo | Unlock Advanced Tools</a>
     </div>
   </div>
 
@@ -136,13 +135,13 @@
     const messages = document.getElementById('messages');
     const input = document.getElementById('input');
     
-    // ** LA LÓGICA AVANZADA DE GROK COMIENZA AQUÍ **
+    // ** THE CORE LOGIC: ADVANCED FREEMIUM FUNNEL **
     let userState = {}; 
 
     function addMsg(text, sender) {
       const div = document.createElement('div');
       div.className = 'msg ' + (sender ? 'user' : 'grok');
-      // Usamos innerHTML para permitir negritas y saltos de línea
+      // Use <a> tag for links and <br> for new lines
       div.innerHTML = text.replace(/\n/g, '<br>'); 
       messages.appendChild(div);
       messages.scrollTop = messages.scrollHeight;
@@ -151,65 +150,65 @@
     function grokResponse(msg, userState) {
         msg = msg.toLowerCase();
         
-        // 1. **PROMOCIÓN DEL MAPA (FREEMIUM DE DATOS)**
-        if (msg.includes('terpeno') || msg.includes('aroma') || msg.includes('sabor') || msg.includes('ciencia')) {
-            return `¡La clave de la calidad de **FlowerForm** está en los terpenos! Para entender la ciencia detrás del aroma y el efecto, te regalamos nuestra base de datos.\n\n**DESCARGA GRATIS:** El **'Canna Grok Terpenome Map'** (CSV/JSON) en nuestro GitHub.\n[Link Directo al Archivo en GitHub]`; // REEMPLAZA ESTE LINK
+        // 1. **TERPENOME MAP PROMOTION (FREE DATA ASSET)**
+        if (msg.includes('terpene') || msg.includes('aroma') || msg.includes('smell') || msg.includes('science')) {
+            // Note: This link MUST be replaced with your actual GitHub RAW link in Step 3
+            const githubLink = "https://raw.githubusercontent.com/less1trujillo/cannagrok.github.io/main/data/terpenome_map.csv";
+            
+            return `The key to **FlowerForm** quality is terpenes! To understand the science behind effects, download our free data asset.\n\n**FREE DOWNLOAD:** The **'Canna Grok Terpenome Map'** (CSV/JSON) is on our GitHub.\n<a href="${githubLink}" target="_blank">Download the RAW Data Now</a>`; 
         }
 
-        // 2. Manejo de Estado/Legalidad (Impulso a Premium: Compliance Navigator)
-        if (msg.includes('legalidad') || msg.includes('estado') || msg.includes('ley')) {
+        // 2. **LEGALITY/STATE CHECK (PREMIUM: Compliance Navigator)**
+        if (msg.includes('legal') || msg.includes('state') || msg.includes('law')) {
             if (userState.state) {
-                return `¡Confirmado! Para **${userState.state}**, la posesión es limitada (regla federal de 1oz). \n\n¿Quieres el **Checklist Completo de Viaje/Transporte** para **${userState.state}**? Eso es parte del **Canna Grok Compliance Navigator** (Premium). [Paga $4.99 aquí]`;
+                return `Confirmed! For **${userState.state}**, possession is limited (typically 1oz max). \n\nDo you need the full **Travel & Transport Checklist** for **${userState.state}**? Unlock the **Canna Grok Compliance Navigator** (Premium). [Pay $4.99 here]`;
             }
             userState.awaitingState = true;
-            return `La legalidad varía mucho. Para la información precisa (+21), ¿podrías decirme **en qué estado te encuentras** (ej: California, Texas, etc.)?`;
+            return `Legality varies greatly. For precise, current info (+21), please tell me **which US State you are in** (e.g., California, Texas, etc.)?`;
         }
 
-        // 3. Respuesta al Producto Estrella (FlowerForm y Dosis Premium: Doser PRO)
-        if (msg.includes('flowerform') || msg.includes('dosis') || msg.includes('potencia')) {
-            let strain = msg.includes('dormir') ? 'Granddaddy Purple' : 'FlowerForm Signature';
-            return `**FlowerForm:** ${strain} es nuestro producto top, garantizado por **CannaGrok**.\nLa dosis básica sugerida es 5mg.\n\nPara calcular tu dosis **exacta** y el tiempo óptimo, desbloquea nuestro **'FlowerForm Doser PRO'** (Premium). [Accede por $4.99]`;
+        // 3. **PRODUCT/DOSAGE (PREMIUM: Doser PRO)**
+        if (msg.includes('flowerform') || msg.includes('dose') || msg.includes('potency')) {
+            let strain = msg.includes('sleep') ? 'Granddaddy Purple' : 'FlowerForm Signature';
+            return `**FlowerForm:** ${strain} is our top-rated product, guaranteed by **CannaGrok**.\n**Basic Suggested Dose:** Start with 5mg of THC.\n\nTo calculate your **exact, personalized dose** and optimal timing, unlock the **'FlowerForm Doser PRO'** (Premium). [Access for $4.99]`;
         }
 
-        // 4. Promoción de Afiliados (CBD)
-        if (msg.includes('cbd') || msg.includes('ansiedad')) {
-            return `El CBD es excelente para el bienestar. Te recomendamos investigar el aceite **Charlotte's Web 20:1**.\n\n[Consíguelo con 20% OFF en CBDistillery aquí] (Tu enlace afiliado)\n\n¿Buscas la mejor forma de integrarlo a tu rutina? Pregunta por nuestra **Guía de Integración (Premium)**.`;
+        // 4. **AFFILIATE PROMOTION (CBD)**
+        if (msg.includes('cbd') || msg.includes('anxiety')) {
+            return `CBD is excellent for wellness. We recommend looking into **Charlotte's Web 20:1** oil (great for relaxation).\n\n[Get 20% OFF at CBDistillery here] (Your affiliate link)\n\nWant the best way to integrate CBD into your routine? Ask about our **Integration Guide (Premium)**.`;
         }
 
-        // 5. Manejo de la respuesta al estado (si se estaba esperando)
+        // 5. **STATE ANSWER HANDLING**
         if (userState.awaitingState) {
-            // Asume que la respuesta es el nombre del estado
             userState.state = msg.toUpperCase().slice(0, 15); 
             userState.awaitingState = false;
-            return `¡Gracias! Entendido, estás en **${userState.state}**.\n\nPara confirmarte las regulaciones de transporte, necesito verificar la base de datos (Premium). ¿Quieres el **Canna Grok Compliance Navigator**? [Paga $4.99 aquí]`;
+            return `Thank you! Got it, you are asking about **${userState.state}**.\n\nTo confirm detailed transport regulations and compliance, you need our full database (Premium). Do you want the **Canna Grok Compliance Navigator**? [Pay $4.99 here]`;
         }
         
-        // 6. Mensaje por defecto
-        return `Soy **Canna Grok**. Puedo ayudarte con preguntas sobre **FlowerForm**, legalidad (+21) y dosis.\n\n*Intenta preguntar:* "¿Qué es el terpeno Myrcene?" o "¿Qué dosis de FlowerForm recomiendas?"`;
+        // 6. **DEFAULT MESSAGE**
+        return `I am **Canna Grok**. I can help you with questions about **FlowerForm**, legality (+21), and dosing.\n\n*Try asking:* "What is the terpene Myrcene?" or "What dose of FlowerForm do you recommend?"`;
     }
 
-    // --- LÓGICA DE INTERFAZ Y ENVÍO ---
+    // --- INTERFACE LOGIC ---
     function send() {
       const text = input.value.trim();
       if (!text) return;
-      addMsg(text, true);
+      addMsg(text, true); // User message
       input.value = '';
       
-      // Simula el "pensamiento" de la IA
-      addMsg('Canna Grok está procesando...', false); 
+      // Simulate AI processing time for better UX
+      addMsg('Canna Grok is processing...', false); 
       
       setTimeout(() => {
-        // Elimina el mensaje de "Pensando..."
-        messages.lastChild.remove(); 
-        // Envía la respuesta avanzada
-        addMsg(grokResponse(text, userState), false);
-      }, 1000); // 1 segundo de simulación de procesamiento
+        messages.lastChild.remove(); // Remove "Processing..." message
+        addMsg(grokResponse(text, userState), false); // Send advanced response
+      }, 1000); // 1 second delay
     }
 
     input.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
 
-    // Mensaje inicial
-    addMsg('¡Bienvenido a CANNAGROK! Pregunta sobre FlowerForm, dosis o legalidad. 🌿', false);
+    // Initial Welcome Message
+    addMsg('Welcome to CANNAGROK! Ask about FlowerForm, dosage, or legality. 🌿', false);
   </script>
 </body>
-</html>
+</html>   implement V2 desing and advanced freemium logic
