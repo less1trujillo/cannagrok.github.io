@@ -1,6 +1,6 @@
 Strain_Name,Dominant_Terpene_1,Dominant_Terpene_2,THC_Avg,CBD_Avg,Reported_Effect,Best_Consumption_Temp_F,Best_Pairing,Link_Review
-"Blue Dream","Myrcene","Pinene",18.5,0.8,"Focus & Uplift",375,"Ejercicio matutino","[URL_A_BLUE_DREAM_REVIEW]"
-"Wedding Cake","Limonene","Caryophyllene",23.0,0.1,"Relaxación Eufórica",385,"Ver una película","[URL_A_WEDDING_CAKE_REVIEW]"
-"Granddaddy Purple","Myrcene","Linalool",19.2,0.5,"Sueño Profundo",400,"Música clásica, Meditación","[URL_A_GDP_REVIEW]"
-"Sour Diesel","Caryophyllene","Limonene",21.5,0.0,"Energía y Creatividad",365,"Café, Trabajo creativo","[URL_A_SOUR_DIESEL_REVIEW]"
-"ACDC","Myrcene","Pinene",0.5,15.0,"Alivio sin euforia",350,"Yoga, Tarde tranquila","[URL_A_ACDC_REVIEW]"
+"Blue Dream","Myrcene","Pinene",18.5,0.8,"Focus & Uplift",375,"Morning Coffee, Light Exercise","[URL_TO_YOUR_BLOG/REVIEW]"
+"Wedding Cake","Limonene","Caryophyllene",23.0,0.1,"Euphoric Relaxation",385,"Watching Movies, Dinner","[URL_TO_YOUR_BLOG/REVIEW]"
+"Granddaddy Purple","Myrcene","Linalool",19.2,0.5,"Deep Sleep",400,"Classical Music, Meditation","[URL_TO_YOUR_BLOG/REVIEW]"
+"Sour Diesel","Caryophyllene","Limonene",21.5,0.0,"Energy and Creativity",365,"Creative Work, Afternoon Boost","[URL_TO_YOUR_BLOG/REVIEW]"
+"ACDC","Myrcene","Pinene",0.5,15.0,"Relief without High",350,"Yoga, Quiet Time","[URL_TO_YOUR_BLOG/REVIEW]"  Asset: Add Terpenome Map CSV
