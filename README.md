@@ -1,83 +1,78 @@
-# 🌿 **CANNAGROK**  
-### *La IA que entiende el cannabis legal — Powered by Grok (xAI)*
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CANNAGROK</title>
+  <style>
+    body { font-family: sans-serif; background: #e8f5e9; margin: 0; padding: 20px; text-align: center; }
+    h1 { color: #2e7d32; font-size: 48px; margin: 10px 0; }
+    p { color: #1b5e20; font-size: 20px; margin: 5px 0; }
+    .chat { max-width: 600px; margin: 20px auto; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    #messages { height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; text-align: left; }
+    .msg { padding: 10px 15px; border-radius: 18px; margin: 5px 0; max-width: 80%; display: inline-block; }
+    .user { background: #4caf50; color: white; margin-left: auto; }
+    .grok { background: #e0e0e0; color: black; }
+    input { width: 70%; padding: 12px; border: 1px solid #ccc; border-radius: 12px; font-size: 16px; }
+    button { background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+    .premium { background: #fff3e0; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>🌿 CANNAGROK</h1>
+  <p><strong>CANNA → GROK → GROW</strong></p>
+  <p>IA + Cannabis Legal. Gratis. 21+. Solo donde es legal.</p>
 
-[![CANNAGROK](https://img.shields.io/badge/CANNAGROK-LIVE-brightgreen)](https://cannagrok.github.io)  
-[![Premium](https://img.shields.io/badge/Premium-%244.99-orange)](https://paypal.me/cannagrok/4.99)  
-[![xAI](https://img.shields.io/badge/Powered%20by-Grok%20(xAI)-blue)](https://x.ai)
+  <div class="chat">
+    <div id="messages"></div>
+    <div style="display: flex; gap: 5px;">
+      <input type="text" id="input" placeholder="Pregunta a Grok..." />
+      <button onclick="send()">Enviar</button>
+    </div>
+  </div>
 
----
+  <div class="premium">
+    <a href="https://paypal.me/cannagrok/4.99" target="_blank"
+       style="background:#ff9800;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">
+       PREMIUM $4.99/mes
+    </a>
+  </div>
 
-## 🚀 **¿Qué es CANNAGROK?**
+  <script>
+    const msgDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
 
-> **"Grok + Cannabis = CANNAGROK"**  
-> La primera app web **100% GRATIS** que responde como Grok, pero solo sobre **cannabis legal**.
+    function addMsg(text, isUser = false) {
+      const div = document.createElement('div');
+      div.className = `msg ${isUser ? 'user' : 'grok'}`;
+      div.innerHTML = text.replace(/\n/g, '<br>');
+      msgDiv.appendChild(div);
+      msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
 
-- Pregunta: *"¿Mejor THC para dormir en Madrid?"*  
-- Responde: *Blue Dream, 18% THC, legal en España si <0.2% → [Comprar]*
+    function grokReply(q) {
+      q = q.toLowerCase();
+      if (q.includes('thc') || q.includes('thca')) {
+        return `THC Legal\n\n- **Blue Dream**\n  <a href="https://dutchie.com?aff=cannagrok">Comprar</a>\n\n<a href="https://paypal.me/cannagrok/4.99">Premium $4.99</a>`;
+      }
+      return `¡Hola! Soy Grok.\nPregunta sobre cannabis legal.\n\n<a href="https://paypal.me/cannagrok/4.99">Premium $4.99</a>`;
+    }
 
----
+    function send() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMsg(text, true);
+      input.value = '';
+      addMsg('Pensando...', false);
+      setTimeout(() => {
+        msgDiv.lastChild.remove();
+        addMsg(grokReply(text), false);
+      }, 800);
+    }
 
-## ✨ **Funciones**
-
-| Feature | Gratis | Premium ($4.99/mes) |
-|--------|--------|---------------------|
-| Chat con Grok | ✅ | ✅ |
-| Strains + efectos | ✅ | ✅ |
-| Mapa de legalidad | ✅ | ✅ |
-| Links de compra (15% comisión) | ✅ | ✅ |
-| **Dosis personalizada** | ❌ | ✅ |
-| **Tracker de consumo** | ❌ | ✅ |
-| **Voz con Grok** | ❌ | ✅ |
-
-[→ Paga Premium aquí](https://paypal.me/cannagrok/4.99)
-
----
-
-## 🌍 **Solo donde es legal**
-
-- Geo-bloqueo por IP  
-- 21+  
-- No promovemos uso ilegal
-
----
-
-## 🛠 **Hecha con 0€ inversión**
-
-| Herramienta | Costo |
-|-----------|-------|
-| GitHub Pages | Gratis |
-| PayPal.Me | Gratis |
-| Grok (simulado) | Gratis |
-| Carrd (landing) | Gratis |
-
----
-
-## 🔥 **Lanzado desde una habitación**
-
-> *"No necesitamos inversores. Solo código, ganas y un peta de inspiración."*  
-> — **Tú + Grok**
-
----
-
-## 📈 **Reto: $20k neto en 30 días**
-
-| Día | Ingresos |
-|-----|---------|
-| Día 1 | $50 |
-| Día 7 | $5.000 |
-| Día 30 | **$20.000+** |
-
----
-
-## 🚨 **¿Quieres ayudar?**
-
-1. **Comparte en X:**  CANNAGROK ESTÁ VIVO. IA + Cannabis Legal. Gratis.
-App: https://cannagrok.github.io
-@elonmusk, ¿retuit?
-#CANNAGROK# CANNAGROK
-La IA que entiende el cannabis legal. Gratis. 21+.
-
-App: https://cannagrok.github.io  
-Premium: https://paypal.me/cannagrok/4.99
-@elonmusk, ¿retuit para el verde?
-#CANNAGROK #Grok #Cannabis     Añadido README
+    input.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
+    addMsg('¡Bienvenido a CANNAGROK! Pregunta sobre cannabis legal.', false);
+  </script>
+</body>
+</html>
+ Añadido README
