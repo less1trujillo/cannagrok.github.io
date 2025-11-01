@@ -1,78 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CANNAGROK</title>
-  <style>
-    body { font-family: sans-serif; background: #e8f5e9; margin: 0; padding: 20px; text-align: center; }
-    h1 { color: #2e7d32; font-size: 48px; margin: 10px 0; }
-    p { color: #1b5e20; font-size: 20px; margin: 5px 0; }
-    .chat { max-width: 600px; margin: 20px auto; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    #messages { height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; text-align: left; }
-    .msg { padding: 10px 15px; border-radius: 18px; margin: 5px 0; max-width: 80%; display: inline-block; }
-    .user { background: #4caf50; color: white; margin-left: auto; }
-    .grok { background: #e0e0e0; color: black; }
-    input { width: 70%; padding: 12px; border: 1px solid #ccc; border-radius: 12px; font-size: 16px; }
-    button { background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-    .premium { background: #fff3e0; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 18px; }
-  </style>
-</head>
-<body>
-  <h1>🌿 CANNAGROK</h1>
-  <p><strong>CANNA → GROK → GROW</strong></p>
-  <p>IA + Cannabis Legal. Gratis. 21+. Solo donde es legal.</p>
+# 🌿 CANNAGROK & GROW
+**CANNA → GROK → GROW**
 
-  <div class="chat">
-    <div id="messages"></div>
-    <div style="display: flex; gap: 5px;">
-      <input type="text" id="input" placeholder="Pregunta a Grok..." />
-      <button onclick="send()">Enviar</button>
-    </div>
-  </div>
+IA que entiende el cannabis legal.
 
-  <div class="premium">
-    <a href="https://paypal.me/cannagrok/4.99" target="_blank"
-       style="background:#ff9800;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">
-       PREMIUM $4.99/mes
-    </a>
-  </div>
+[App →](https://cannagrok.github.io)  
+[Premium →](https://paypal.me/cannagrok/4.99)
 
-  <script>
-    const msgDiv = document.getElementById('messages');
-    const input = document.getElementById('input');
-
-    function addMsg(text, isUser = false) {
-      const div = document.createElement('div');
-      div.className = `msg ${isUser ? 'user' : 'grok'}`;
-      div.innerHTML = text.replace(/\n/g, '<br>');
-      msgDiv.appendChild(div);
-      msgDiv.scrollTop = msgDiv.scrollHeight;
-    }
-
-    function grokReply(q) {
-      q = q.toLowerCase();
-      if (q.includes('thc') || q.includes('thca')) {
-        return `THC Legal\n\n- **Blue Dream**\n  <a href="https://dutchie.com?aff=cannagrok">Comprar</a>\n\n<a href="https://paypal.me/cannagrok/4.99">Premium $4.99</a>`;
-      }
-      return `¡Hola! Soy Grok.\nPregunta sobre cannabis legal.\n\n<a href="https://paypal.me/cannagrok/4.99">Premium $4.99</a>`;
-    }
-
-    function send() {
-      const text = input.value.trim();
-      if (!text) return;
-      addMsg(text, true);
-      input.value = '';
-      addMsg('Pensando...', false);
-      setTimeout(() => {
-        msgDiv.lastChild.remove();
-        addMsg(grokReply(text), false);
-      }, 800);
-    }
-
-    input.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
-    addMsg('¡Bienvenido a CANNAGROK! Pregunta sobre cannabis legal.', false);
-  </script>
-</body>
-</html>
+@elonmusk, ¿retuit?
  Añadido README
