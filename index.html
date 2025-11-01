@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
@@ -6,20 +6,22 @@
   <title>CANNAGROK</title>
   <style>
     body { font-family: sans-serif; background: #e8f5e9; margin: 0; padding: 20px; text-align: center; }
-    h1 { color: #2e7d32; font-size: 36px; }
-    .chat { max-width: 600px; margin: 20px auto; background: white; border-radius: 15px; padding: 15px; }
+    h1 { color: #2e7d32; font-size: 48px; margin: 10px 0; }
+    p { color: #1b5e20; font-size: 20px; margin: 5px 0; }
+    .chat { max-width: 600px; margin: 20px auto; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     #messages { height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; text-align: left; }
     .msg { padding: 10px 15px; border-radius: 18px; margin: 5px 0; max-width: 80%; display: inline-block; }
     .user { background: #4caf50; color: white; margin-left: auto; }
     .grok { background: #e0e0e0; color: black; }
     input { width: 70%; padding: 12px; border: 1px solid #ccc; border-radius: 12px; font-size: 16px; }
-    button { background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; }
-    .premium { background: #fff3e0; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; }
+    button { background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+    .premium { background: #fff3e0; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 18px; }
   </style>
 </head>
 <body>
-  <h1>CANNAGROK</h1>
-  <p>IA + Cannabis Legal. Gratis. 21+.</p>
+  <h1>🌿 CANNAGROK</h1>
+  <p><strong>CANNA → GROK → GROW</strong></p>
+  <p>IA + Cannabis Legal. Gratis. 21+. Solo donde es legal.</p>
 
   <div class="chat">
     <div id="messages"></div>
@@ -69,7 +71,8 @@
     }
 
     input.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
-    addMsg('¡Bienvenido a CANNAGROK!', false);
+    addMsg('¡Bienvenido a CANNAGROK! Pregunta sobre cannabis legal.', false);
   </script>
 </body>
-</html>    Subo la app CANNAGROK
+</html>  
+Subo la app CANNAGROK
