@@ -51,9 +51,18 @@
     }
 
     function grokReply(q) {
-      q = q.toLowerCase();
-      if (q.includes('thc') || q.includes('thca')) {
-        return `THC Legal\n\n- **Blue Dream**\n  <a href="https://dutchie.com?aff=cannagrok">Comprar</a>\n\n<a href="https://paypal.me/cannagrok/4.99">Premium $4.99</a>`;
+  q = q.toLowerCase();
+  if (q.includes('thc') || q.includes('thca') || q.includes('strain')) {
+    return `🌿 **TOP THCA STRAINS 2025** (Legal <0.3% THC dry weight)<grok-card data-id="c91235" data-type="citation_card"></grok-card><grok-card data-id="7c9772" data-type="citation_card"></grok-card><grok-card data-id="50a220" data-type="citation_card"></grok-card><br><br>
+- **Blue Dream** (Hybrid, 19.8% THCA): Berry sweet, balanced high. Ideal for focus. [Buy →](https://dutchie.com?aff=cannagrok)<br>
+- **Jealousy** (Hybrid, 21%+ THCA): Euphoric lift, relaxation. Top seller Black Tie.<grok-card data-id="9c3449" data-type="citation_card"></grok-card><br>
+- **White Runtz** (Hybrid, 31.55% THCA): Creamy, euphoric. Lucky Elk's gem.<grok-card data-id="80be4d" data-type="citation_card"></grok-card><br>
+- **Gorilla Glue #4** (Hybrid, 22% THCA): Potent glue, stress relief. 3CHI favorite.<grok-card data-id="f40e66" data-type="citation_card"></grok-card><br>
+- **Gelato 41** (Hybrid, 20% THCA): Dessert sweet, creative buzz.<grok-card data-id="b1303e" data-type="citation_card"></grok-card><br><br>
+**Premium $4.99/mo → Tu plan GROW personalizado (dosis + tracker).** [Pay →](https://paypal.me/cannagrok/4.99)`;
+  }
+  // ... resto del código igual
+}
       }
       return `¡Hola! Soy Grok.\nPregunta sobre cannabis legal.\n\n<a href="https://paypal.me/cannagrok/4.99">Premium $4.99</a>`;
     }
