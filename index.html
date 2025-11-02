@@ -7,17 +7,21 @@
     <meta name="description" content="National map of 1,000+ legal dispensaries (THC, THCA, CBD). Powered by AI. 21+ only.">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
     <style>
+        /* ==================================================== */
+        /* === 1. GLOBAL STYLES & VARIABLES (MODERN PALETTE) === */
+        /* ==================================================== */
         :root {
-            --green-dark: #1B5E20;
-            --green-light: #66BB6A;
-            --gray-dark: #212121;
+            --green-dark: #008000; /* Verde más vivo y corporativo */
+            --green-light: #4CAF50; /* Verde claro de acento */
+            --gray-dark: #333333;
             --white: #FFFFFF;
-            --gold-accent: #FFD700; 
-            --dark-overlay: rgba(0, 0, 0, 0.75); 
-            --bg-light: #f5f5f5; /* For dashboard background */
-            --bg-card: #ffffff;
+            --gold-accent: #FFC107; /* Dorado más vibrante */
+            --dark-overlay: rgba(0, 0, 0, 0.85); 
+            --bg-light: #F7F7F7; /* Fondo general muy claro */
+            --bg-card: #FFFFFF;
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -25,14 +29,17 @@
             background: var(--bg-light); 
             color: var(--gray-dark); 
             line-height: 1.6;
+            transition: background 0.3s;
         }
+
+        /* === Header & Branding === */
         header { 
             background: var(--green-dark); 
-            padding: 20px; 
+            padding: 15px 20px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         .logo {
             display: flex;
@@ -41,68 +48,78 @@
             color: white;
             text-decoration: none;
             font-weight: 900;
-            font-size: 28px;
+            font-size: 26px;
         }
-        .logo svg { width: 40px; height: 40px; }
+        .logo svg { width: 30px; height: 30px; fill: white; }
         .tagline { 
-            color: #A5D6A7; 
-            font-size: 14px; 
+            color: #C8E6C9; 
+            font-size: 13px; 
             font-weight: 400; 
-            margin-top: 4px;
             text-align: center;
+            padding: 5px 0 15px;
+            background: var(--green-dark); 
         }
-        h1 { font-size: 36px; margin: 20px 0 8px; color: var(--green-dark); text-align: center; }
-        .subtitle { font-size: 18px; color: #43A047; margin-bottom: 10px; text-align: center; }
-        .legal { font-size: 12px; color: #666; margin-bottom: 15px; text-align: center; }
+        h1 { font-size: 32px; margin: 20px 0 5px; color: var(--green-dark); text-align: center; font-weight: 900; }
+        .subtitle { font-size: 16px; color: #666; margin-bottom: 15px; text-align: center; }
+        .legal { font-size: 11px; color: #888; margin-bottom: 10px; text-align: center; }
+
+        /* === Controls (Search & Filters) === */
         .controls { 
-            margin: 20px auto; 
+            margin: 15px auto; 
             display: flex; 
             justify-content: center; 
             gap: 12px; 
             flex-wrap: wrap; 
-            max-width: 1000px;
+            max-width: 1200px;
+            padding: 0 20px;
         }
         .controls select, .controls input { 
-            padding: 14px; 
-            border-radius: 12px; 
+            padding: 12px 15px; 
+            border-radius: 8px; 
             border: 1px solid #DDD; 
-            font-size: 16px; 
-            min-width: 240px;
+            font-size: 15px; 
+            min-width: 200px;
+            background: var(--white);
+            transition: border-color 0.3s;
         }
-        .controls select { background: white; }
+        .controls select:focus, .controls input:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            outline: none;
+        }
         .state-info { 
-            font-size: 16px; 
+            font-size: 15px; 
             color: var(--green-dark); 
-            margin: 10px; 
+            margin: 10px 0; 
             font-weight: 600; 
             text-align: center;
         }
-        .popup-link { color: var(--green-light); font-weight: 700; text-decoration: none; }
-        
-        /* ---------------------------------------------------- */
-        /* === NEW APP STRUCTURE (MAP + DASHBOARD) === */
-        /* ---------------------------------------------------- */
+
+        /* ==================================================== */
+        /* === 2. APP STRUCTURE (MAP + DASHBOARD) === */
+        /* ==================================================== */
         #app-container {
             display: flex;
             max-width: 1400px;
             margin: 20px auto;
             gap: 20px;
             padding: 0 20px;
-            min-height: 600px; 
+            min-height: 70vh; 
         }
 
         #map-area {
-            flex-grow: 1; /* Map takes remaining space */
+            flex-grow: 1; 
             min-width: 60%;
             position: relative;
         }
         
         #map-container {
-            height: 600px;
+            height: 650px; /* Mapa más alto */
             position: relative;
             border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
+            border: 1px solid #E0E0E0;
         }
         
         #map { 
@@ -110,34 +127,89 @@
             width: 100%; 
         }
 
-        /* PREMIUM DASHBOARD */
+        /* === Leaflet Custom Markers (Nuevos Iconos) === */
+        .affiliate-marker div {
+            background-color: var(--gold-accent);
+            color: var(--green-dark);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 700;
+            border: 2px solid var(--green-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 10px;
+        }
+        .regular-marker div {
+            background-color: var(--green-dark);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 700;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 10px;
+        }
+
+        /* === Popup Styles === */
+        .popup-link { 
+            color: white; 
+            font-weight: 700; 
+            text-decoration: none;
+            display: block; 
+            padding: 8px 12px; 
+            text-align: center; 
+            background-color: var(--green-light); 
+            border-radius: 5px; 
+            transition: background-color 0.2s;
+        }
+        .popup-link:hover {
+            background-color: var(--green-dark);
+        }
+        
+        /* === PREMIUM DASHBOARD (Modern Card) === */
         #premiumDashboard {
             width: 350px;
-            background: var(--white);
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            flex-shrink: 0; /* Prevents shrinking */
-            display: none; /* Only visible if PREMIUM */
+            box-shadow: var(--shadow-lg);
+            flex-shrink: 0; 
+            display: none; 
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
-            border: 2px solid var(--green-light);
+            border: 2px solid var(--gold-accent); /* Borde dorado Premium */
         }
         #premiumDashboard h2 {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--green-dark);
             margin-bottom: 10px;
             text-align: center;
+            font-weight: 900;
         }
         .dashboard-section {
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             background: var(--bg-light);
             border: 1px solid #E0E0E0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        /* ... (Keep other dashboard styles as before) ... */
-        .profile-form select, .profile-form input[type="text"] {
+        .dashboard-section h3 {
+            color: var(--green-dark);
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        /* Chat Module */
+        #chatPlaceholder {
+            padding: 10px;
+            background: #E8F5E9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.9em;
+        }
+        #chatInput, .profile-form select, .profile-form input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -145,26 +217,30 @@
             border: 1px solid #ccc;
             background: var(--white);
         }
-        .profile-form label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            font-weight: 600;
-            color: var(--green-dark);
-        }
-        .profile-form button {
-            background: var(--green-dark);
+        #grokButton, .profile-form button {
+            background: var(--green-light);
             color: white;
             padding: 10px;
             border: none;
             border-radius: 8px;
             width: 100%;
             font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        #grokButton:hover, .profile-form button:hover { background: var(--green-dark); }
         
-        /* ---------------------------------------------------- */
-        /* === AGE VERIFICATION / LOGIN MODAL STYLES (NEW) === */
-        /* ---------------------------------------------------- */
+        #queryCounter {
+            text-align: right;
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+
+        /* ==================================================== */
+        /* === 3. MODALS & PAYWALL (Fluid UI) === */
+        /* ==================================================== */
 
         #ageGateOverlay {
             position: fixed;
@@ -176,46 +252,33 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000; 
-            /* Start visible, JS will hide it */
+            z-index: 2000; /* Alto Z-index para asegurar visibilidad */
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
         }
+        .modal-hidden { opacity: 0; pointer-events: none; } /* Clase para ocultar */
 
         #loginModal {
-            background: var(--white);
+            background: var(--bg-card);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--shadow-lg);
             max-width: 400px;
             width: 90%;
             text-align: center;
             border: 3px solid var(--green-dark);
+            animation: fadeIn 0.5s ease-out;
         }
 
-        #loginModal h2 {
-            color: var(--green-dark);
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        #loginModal p {
-            margin-bottom: 20px;
-            color: #666;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-button {
-            width: 100%;
-            padding: 15px;
-            background: var(--green-light);
+            background: var(--green-dark);
             color: white;
+            padding: 15px;
             border: none;
             border-radius: 8px;
             font-size: 18px;
@@ -223,70 +286,59 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        .login-button:hover { background: var(--green-dark); }
+        .login-button:hover { background: var(--green-light); }
         
-        /* ---------------------------------------------------- */
-        /* === PREMIUM LOCKING STYLES (MODIFIED) === */
-        /* ---------------------------------------------------- */
-        
-        /* We remove the .premium-locked blur from the map entirely */
-        /* We use the paywall ONLY to promote the AI Dashboard */
-        
-        #map.ai-locked {
-            filter: blur(5px);
-            pointer-events: none;
-            user-select: none;
-            opacity: 0.6;
-        }
-        
+        /* === AI PAYWALL PROMOTION === */
         #paywall-overlay {
-            /* Keep all original paywall styles but make it less aggressive */
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            /* Make overlay slightly transparent white so map is visible but AI feature is promoted */
-            background-color: rgba(255, 255, 255, 0.85); 
-            text-align: center;
+            display: flex; /* Asegura que el contenido esté centrado */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.95); /* Blanco semi-transparente */
             padding: 20px;
             z-index: 100; 
             border-radius: 16px;
-            display: none; /* Only show if map is unlocked but AI is locked */
+            text-align: center;
         }
-        
         #paywall-overlay h2 {
-            color: var(--gold-accent);
-            font-size: 2.0em; /* Smaller */
-            margin-bottom: 10px;
+            font-size: 2.2em;
             color: var(--green-dark);
-            text-shadow: none;
+            margin-bottom: 10px;
+            font-weight: 900;
         }
         #paywall-overlay p {
             color: var(--gray-dark);
-            font-size: 1.2em;
+            font-size: 1.1em;
             max-width: 80%;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .cta-button-large {
-            /* Keep original styles */
             background: var(--gold-accent);
             color: var(--gray-dark);
-            padding: 15px 30px;
+            padding: 18px 40px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 900;
-            font-size: 1.1em;
+            font-size: 1.2em;
             transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.5);
         }
         .unpaid-link {
-            color: var(--green-dark); /* Changed color */
+            color: var(--green-dark);
             text-decoration: underline;
-            margin-top: 10px;
+            margin-top: 15px;
             cursor: pointer;
+            font-size: 0.9em;
         }
 
-
+        /* ==================================================== */
+        /* === 4. RESPONSIVE DESIGN & FOOTER === */
+        /* ==================================================== */
         @media (max-width: 1000px) {
             #app-container {
                 flex-direction: column;
@@ -295,18 +347,89 @@
             #premiumDashboard {
                 width: 100%;
             }
-            #map-area {
+            #map-container {
+                height: 400px;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .controls select, .controls input {
                 min-width: 100%;
             }
+            /* Make paywall float below map on mobile */
             #paywall-overlay {
-                /* Make it look like a floating box on small screens */
                 position: static;
                 margin-top: 20px;
                 background-color: var(--bg-card);
                 border: 2px solid var(--gold-accent);
+                box-shadow: var(--shadow-md);
             }
         }
-        
+
+        /* === Insights & Footer (Improved design) === */
+        .insights-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .insights-section h2 {
+            font-size: 28px;
+            color: var(--green-dark);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .insight-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--green-light);
+            transition: transform 0.2s;
+        }
+        .insight-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .insight-card h3 { color: var(--gray-dark); font-size: 18px; margin-bottom: 10px; }
+        .insight-icon { font-size: 1.2em; margin-right: 8px; color: var(--gold-accent); }
+        .cta-mini { color: var(--green-dark); font-weight: 600; text-decoration: none; display: block; margin-top: 10px; }
+
+        .premium-box {
+            background: #FFFDE7; /* Fondo suave para promoción */
+            border: 1px solid var(--gold-accent);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: var(--shadow-md);
+        }
+        .premium-box a {
+            background: var(--gold-accent);
+            color: var(--gray-dark);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .premium-box a:hover {
+            background: #FFEB3B;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #EEE;
+        }
     </style>
 </head>
 <body>
@@ -315,18 +438,17 @@
         <div id="loginModal">
             <h2>Welcome to CANNAGROK</h2>
             <p>Please log in and verify your age (21+) to unlock the national map of affiliates.</p>
-            <input type="email" id="loginEmail" class="login-input" placeholder="Enter your Email">
-            <input type="number" id="loginAge" class="login-input" placeholder="Enter your Age (21+)">
+            <input type="email" id="loginEmail" class="login-input" placeholder="Enter your Email" required>
+            <input type="number" id="loginAge" class="login-input" placeholder="Enter your Age (21+)" required>
             <button class="login-button" onclick="loginAndVerify()">Unlock Map Access</button>
-            <p style="font-size: 0.8em; margin-top: 15px; color: red;">You must be 21 or older to proceed.</p>
+            <p style="font-size: 0.8em; margin-top: 15px; color: #999;">You must be 21 or older to proceed. The full map is free after verification.</p>
         </div>
     </div>
     <header>
         <a href="/" class="logo">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="8"/>
-                <path d="M50 20 L60 40 L75 45 L62 58 L65 75 L50 65 L35 75 L38 58 L25 45 L40 40 Z" fill="currentColor"/>
-                <circle cx="50" cy="50" r="15" fill="currentColor"/>
+                <path d="M50 0C30 0 10 30 10 50S30 100 50 100 90 70 90 50 70 0 50 0zM50 20c-15 0-25 15-25 30s10 30 25 30 25-15 25-30-10-30-25-30z" fill="white"/>
+                <circle cx="50" cy="50" r="10" fill="#008000"/>
             </svg>
             CANNAGROK
         </a>
@@ -376,11 +498,6 @@
                     <div class="premium-message">
                         Already paid? <a href="#" class="unpaid-link" onclick="unlockPremium()">Enter your unlock code here</a>
                     </div>
-                    
-                    <a href="https://twitter.com/intent/tweet?text=The%20CANNAGROK%20map%20is%20now%20AI-powered!%20$4.99%20gets%20you%20a%20personal%20Auto-Assistant.%20%F0%9F%A7%A0%20%5BYour%20URL%5D%20%23CANNAGROK%20%23AIAssistant" target="_blank" class="x-share-button" style="margin-top: 15px;">
-                        <svg class="x-icon" viewBox="0 0 24 24" aria-hidden="true" fill="white"><g><path d="M18.244 2.25h3.308l-7.227 8.261 8.527 11.239H20.73l-7.794-9.846L19.24 22H15.75L12.33 16.5L6.096 22H3.725L10.741 12.871L3.056 2.25h3.308l5.215 6.817L18.244 2.25zm-2.883 18l1.83 2.146h-2.181L8.718 9.38L3.483 22H1.109l7.794-9.846L2.252 2.25h4.15l4.631 6.035L14.773 2.25h4.218l-7.447 9.873z"></path></g></svg>
-                        Share the AI Upgrade on X!
-                    </a>
                 </div>
                 
                 <div id="map" class="ai-locked"></div>
@@ -389,14 +506,19 @@
 
         <div id="premiumDashboard">
             <h2>CANNAGROK AI Dashboard</h2>
+            <div class="dashboard-section" style="border: 2px solid var(--green-dark);">
+                <h3>🌿 Grok Knowledge: Flower First</h3>
+                <p style="font-size: 0.9em; color: var(--green-dark); font-weight: 600;">
+                    Your AI is trained in the **full "Seed to Consumer" life cycle**. Ask Grok about: **Terpenes, THC/THCA potency based on Flower Stage, Optimal Curing, and Cultivation methods (Indoor/Outdoor).**
+                </p>
+            </div>
             
             <div id="aiChatModule" class="dashboard-section">
                 <h3>Ask Grok - AI Auto-Assistant</h3>
                 <div id="chatPlaceholder">
-                    <p style="color:#1B5E20; font-weight:700;">Grok: I am ready! Based on your profile, how can I help you today?</p>
-                    <p>Try: "What are the best Indica strains for sleep near me?"</p>
+                    <p style="color:#008000; font-weight:700;">Grok: I am ready! Based on your profile, how can I help you today?</p>
                 </div>
-                <input type="text" id="chatInput" placeholder="Your query (e.g., 'legal status in Texas?')...">
+                <input type="text" id="chatInput" placeholder="Your query (e.g., 'terpenes for sleep?')...">
                 <button id="grokButton" onclick="askGrok()">Ask Grok</button>
                 <div id="queryCounter">15/15 Daily Queries Remaining</div>
             </div>
@@ -429,34 +551,26 @@
             </div>
             
             <div class="dashboard-section">
-                <h3>Your AI Recommendations</h3>
-                <p style="font-size:0.9em; color:#444;">*The AI will list your top 5 personalized strain and product suggestions here, based on your profile and local store data.*</p>
-                <ul style="margin-top:10px; list-style:none; padding-left:0;">
-                    <li>- [Suggestion 1]</li>
-                    <li>- [Suggestion 2]</li>
-                </ul>
-            </div>
-            
-            <div class="dashboard-section">
                 <h3>Local VIP Deals</h3>
-                <p style="font-size:0.9em; color:#444;">*Daily alerts on the best local discounts and offers from affiliates near your Zip Code (e.g., 20% off Edibles).*</p>
+                <p style="font-size:0.9em; color:#444;">*Daily alerts on the best local discounts and offers from affiliates near your Zip Code.*</p>
             </div>
         </div>
         
     </div>
+    
     <div class="insights-section">
         <h2>CANNAGROK Insights (Free Education)</h2>
         <div class="insights-grid">
             
             <div class="insight-card">
                 <h3><span class="insight-icon">🌿</span> Legalization 101: Farm Bill THCA</h3>
-                <p>Learn the legal distinction between THC and THCA. Discover why hundreds of dispensaries across non-legal states (like North Carolina and Texas) can sell high-potency products under the 2018 Farm Bill.</p>
+                <p>Learn the legal distinction between THC and THCA. Discover why hundreds of dispensaries can sell high-potency products under the 2018 Farm Bill.</p>
                 <a href="#" class="cta-mini">Read the full Free Guide →</a>
             </div>
 
             <div class="insight-card">
                 <h3><span class="insight-icon">⚖️</span> Know Your State's Limits</h3>
-                <p>A quick breakdown of recreational vs. medical vs. hemp laws. Always check your state's current possession limits for flowers, edibles, and concentrates before traveling.</p>
+                <p>A quick breakdown of recreational vs. medical vs. hemp laws. Always check your state's current possession limits for flowers, edibles, and concentrates.</p>
                 <a href="#" class="cta-mini">View State by State Summary →</a>
             </div>
 
@@ -467,15 +581,11 @@
             </div>
             
         </div>
-        
-        <div class="premium-box" style="margin-top: 30px; background: #E8F5E9;">
-            <p style="font-size:16px;">Want a personal guide? Unlock the **AI Auto-Assistant** for instant answers and personalized strain recommendations based on your unique goals.</p>
-            <a href="https://paypal.me/cannagrok/4.99" target="_blank">Upgrade to AI Access ($4.99/mo)</a>
-        </div>
     </div>
+    
     <div class="premium-box">
-        <div>PREMIUM $4.99/mo: AI AUTO-ASSISTANT</div>
-        <div style="font-size:14px; margin:8px 0;">Personalized Product Guides • Local Offers • Instant Cannabis Answers</div>
+        <div>PREMIUM $4.99/mo: AI AUTO-ASSISTANT (GROK)</div>
+        <div style="font-size:14px; margin:8px 0;">Personalized Product Guides • Flower-First Knowledge • Local Offers</div>
         <a href="https://paypal.me/cannagrok/4.99" target="_blank">Upgrade to AI Access</a>
     </div>
 
@@ -483,26 +593,19 @@
         <p>© 2025 CANNAGROK | Powered by Grok & xAI | Charlotte, NC</p>
     </footer>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%231B5E20%22/><path d=%22M50 20 L60 40 L75 45 L62 58 L65 75 L50 65 L35 75 L38 58 L25 45 L40 40 Z%22 fill=%22white%22/><circle cx=%2250%22 cy=%2250%22 r=%2215%22 fill=%22white%22/></svg>" type="image/svg+xml">
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // ------------------------------------------------------------------
-        // === 0. MONETIZATION AND UNLOCK VARIABLES ===
+        // === I. VARIABLES & ACCESS LOGIC (KEY FUNCTIONS) ===
         // ------------------------------------------------------------------
-        const PREMIUM_SALES_LINK = "https://paypal.me/cannagrok/4.99"; // YOUR REAL URL
-        const PREMIUM_UNLOCK_CODE = "CANNAGROK2025"; // STATIC CODE FOR PREMIUM USER
-        const CANNAGROK_URL = window.location.href; 
-        const MAX_DAILY_QUERIES = 15; // API COST CONTROL
+        const PREMIUM_SALES_LINK = "https://paypal.me/cannagrok/4.99";
+        const PREMIUM_UNLOCK_CODE = "CANNAGROK2025";
+        const MAX_DAILY_QUERIES = 15;
 
         let queriesToday = parseInt(localStorage.getItem('grokQueriesToday')) || 0;
         let lastQueryDate = localStorage.getItem('lastQueryDate') || '';
         let currentZipLat, currentZipLng; 
 
-        // ------------------------------------------------------------------
-        // === I. ACCESS & FREEMIUM / PREMIUM LOGIC (MODIFIED) ===
-        // ------------------------------------------------------------------
-        
         function loginAndVerify() {
             const email = document.getElementById('loginEmail').value.trim();
             const age = parseInt(document.getElementById('loginAge').value.trim());
@@ -517,15 +620,18 @@
                 return;
             }
             
-            // SIMULATED LOGIN SUCCESS:
+            // SIMULATED LOGIN SUCCESS: Map Access is FREE after this step.
             localStorage.setItem('cannagrok_map_unlocked', 'true');
-            localStorage.setItem('userEmail', email); // Save for future use
+            localStorage.setItem('userEmail', email); 
             
-            document.getElementById('ageGateOverlay').style.display = 'none';
-            document.getElementById('map').classList.remove('ai-locked'); // Unlock map view
-            document.getElementById('paywall-overlay').style.display = 'flex'; // Show AI paywall overlay
+            // Hide modal with smooth transition
+            const ageGate = document.getElementById('ageGateOverlay');
+            ageGate.classList.add('modal-hidden');
+            setTimeout(() => { ageGate.style.display = 'none'; }, 300);
+
+            // Show AI Paywall overlay on the map (only for promotion)
+            document.getElementById('paywall-overlay').style.display = 'flex';
             
-            // Re-initialize map with full access
             loadProfileData(); 
         }
 
@@ -533,27 +639,21 @@
             const code = prompt("Enter your CANNAGROK Premium Unlock Code:");
             
             if (code === PREMIUM_UNLOCK_CODE) {
-                // 1. UNLOCK AI
-                document.getElementById('map').classList.remove('ai-locked');
+                // UNLOCK AI & HIDE PROMOTIONAL PAYWALL
                 document.getElementById('paywall-overlay').style.display = 'none';
                 
-                // 2. SHOW DASHBOARD
+                // SHOW DASHBOARD
                 document.getElementById('premiumDashboard').style.display = 'flex';
                 
-                // 3. SAVE STATE
+                // SAVE STATE
                 localStorage.setItem('cannagrok_premium', 'unlocked'); 
-                localStorage.setItem('cannagrok_map_unlocked', 'true'); // Ensure map stays unlocked
+                localStorage.setItem('cannagrok_map_unlocked', 'true'); 
                 
                 checkDailyReset();
                 updateQueryCounter();
                 loadProfileData(); 
                 
-                const tweetText = encodeURIComponent(`I just unlocked the CANNAGROK AI Auto-Assistant! For $4.99/mo, I get personalized strain guidance and local deals. This changes everything. 🤖➡️ ${CANNAGROK_URL} #CANNAGROK #AIAssistant #CannabisTech`);
-                const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
-
-                if (confirm("Premium AI Access Unlocked! Thank you for your subscription.\n\nHelp us grow: Would you like to share your successful AI upgrade on X/Twitter now?")) {
-                    window.open(tweetUrl, '_blank');
-                }
+                alert("Premium AI Access Unlocked! Thank you for your subscription.");
                 
             } else if (code !== null) {
                 alert("Incorrect code. Please verify your payment or click the 'Activate AI Access' button to subscribe.");
@@ -565,27 +665,23 @@
             const isPremium = localStorage.getItem('cannagrok_premium') === 'unlocked';
             
             if (isPremium) {
-                // PREMIUM: Map fully visible, AI Dashboard visible, no paywall overlay
                 document.getElementById('ageGateOverlay').style.display = 'none';
-                document.getElementById('map').classList.remove('ai-locked');
                 document.getElementById('paywall-overlay').style.display = 'none';
                 document.getElementById('premiumDashboard').style.display = 'flex';
                 
             } else if (isMapUnlocked) {
-                // FREE MAP: Map fully visible, AI Dashboard hidden, show AI paywall overlay
                 document.getElementById('ageGateOverlay').style.display = 'none';
-                document.getElementById('map').classList.remove('ai-locked');
                 document.getElementById('paywall-overlay').style.display = 'flex';
                 document.getElementById('premiumDashboard').style.display = 'none';
                 
             } else {
-                // LOCKED: Show age gate
+                // Default: Show age gate. Use CSS class for smooth show/hide.
                 document.getElementById('ageGateOverlay').style.display = 'flex';
-                // Map starts blurred/locked by default by the 'ai-locked' class (visual cue only)
+                document.getElementById('ageGateOverlay').classList.remove('modal-hidden');
             }
         }
 
-        // --- Keep existing functions (updateQueryCounter, checkDailyReset, askGrok, saveProfile) ---
+        // --- AI CHAT LOGIC (FLOWER-FIRST) ---
         function updateQueryCounter() {
             const remaining = MAX_DAILY_QUERIES - queriesToday;
             const counterElement = document.getElementById('queryCounter');
@@ -618,31 +714,48 @@
         function askGrok() {
             const input = document.getElementById('chatInput');
             const chatBox = document.getElementById('chatPlaceholder');
-            const query = input.value.trim();
+            const query = input.value.trim().toLowerCase();
+            const userGoal = localStorage.getItem('profileGoal') || 'desconocido';
+            const userExp = localStorage.getItem('profileExperience') || 'novice';
+            const userZip = localStorage.getItem('profileZip') || 'N/A';
 
             if (!query) return;
 
             if (queriesToday >= MAX_DAILY_QUERIES) {
-                chatBox.innerHTML += `<p style="color:red;">Limit reached. Please try again tomorrow.</p>`;
+                chatBox.innerHTML += `<p style="color:red; margin-top:10px;">Grok: Límite diario de consultas (${MAX_DAILY_QUERIES}) alcanzado. Intenta de nuevo mañana.</p>`;
                 input.value = '';
                 chatBox.scrollTop = chatBox.scrollHeight;
                 return;
             }
 
-            // SIMULATE AI QUERY (In a real app, this would be the API call)
+            // SIMULACIÓN DE RESPUESTA AI AVANZADA (FLOWER-FIRST)
+            let aiResponse = "";
+
+            if (query.includes("terpenos") || query.includes("aroma")) {
+                aiResponse = `Grok: Excelente pregunta. Basado en tu perfil (**Meta: ${userGoal}**), necesitas cepas altas en ${userGoal === 'sleep' ? 'Myrcene y Linalool' : 'Limonene y Pinene'}. Estos terpenos se desarrollan durante la fase de **Floración tardía** del cultivo y son clave para el efecto. Estoy revisando la base de datos de los **${userZip}** afiliados cercanos... Te recomiendo: [CANNABUDDY] por su alto contenido de Myrcene verificado en su última prueba.`;
+            } else if (query.includes("thca") || query.includes("legal")) {
+                aiResponse = `Grok: En **${userZip}**, la legalidad del THCA se basa en el porcentaje de Delta-9-THC post-decarboxilación, un proceso que simula el consumo. El THCA es la forma ácida dominante en la flor cruda recién cortada (etapa de **Cosecha/Post-Floración**). Los afiliados cercanos (ej. [Hemp Hop]) manejan certificados que validan su cumplimiento con el Farm Bill.`;
+            } else if (query.includes("potencia") || query.includes("fuerte")) {
+                aiResponse = `Grok: La potencia (THC/THCA) se maximiza con una nutrición óptima en la fase **Vegetativa** y un manejo preciso de la luz durante la **Floración**. Para un **Experto** como tú (${userExp}), he marcado los afiliados ([Apotheca Cannabis]) que tienen inventario con un total de canabinoides >30%, producto de un ciclo de cultivo enfocado en maximizar los tricomas.`;
+            } else if (query.includes("cultivo") || query.includes("indoor")) {
+                aiResponse = `Grok: La distinción **Indoor vs. Outdoor** es crucial. Los cultivos Indoor ([Green Dot Labs]) ofrecen tricomas más densos debido al control total de luz (simulando 12h/12h en **Floración**). Los Outdoor suelen tener un perfil de terpenos más amplio. He filtrado tu mapa para priorizar las tiendas con producto 'Indoor Premium' para tu búsqueda.`;
+            } else {
+                aiResponse = `Grok: Entendido. Para tu consulta sobre "${query}", mi análisis Flower-First te sugiere que busques productos con un buen curado. El curado (post-**Cosecha**) es vital para mantener los terpenos y reducir el 'harshness'. Estoy buscando las 3 mejores opciones de 'Flower' curada cerca de **${userZip}**.`;
+            }
+            
             queriesToday++;
             localStorage.setItem('grokQueriesToday', queriesToday);
             localStorage.setItem('lastQueryDate', new Date().toDateString());
             updateQueryCounter();
             
-            const aiResponse = `Grok: Based on your query "${query}", I found 3 products that match your profile (Goal: ${localStorage.getItem('profileGoal') || 'N/A'}, Zip: ${localStorage.getItem('profileZip') || 'N/A'}). I've added them to your 'AI Recommendations' list on the dashboard. **The map markers are now prioritized by your Zip Code!**`;
-
             // Display conversation
-            chatBox.innerHTML += `<p style="color:#212121; font-weight:600; margin-top:5px;">You: ${query}</p>`;
-            chatBox.innerHTML += `<p style="color:#1B5E20; margin-bottom:5px;">${aiResponse}</p>`;
+            chatBox.innerHTML += `<p style="color:#212121; font-weight:600; margin-top:5px;">Tú: ${query}</p>`;
+            chatBox.innerHTML += `<p style="color:#008000; margin-bottom:5px;">${aiResponse}</p>`;
             
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
+            
+            document.getElementById('stateInfo').textContent = `AI Map Filter: ${userGoal} + ${userExp} | Actualizando ofertas cerca de ${userZip}...`;
         }
 
         function saveProfile() {
@@ -655,10 +768,11 @@
             localStorage.setItem('profileZip', zip);
             
             alert(`AI Profile Saved!\nGoal: ${goal}\nExperience: ${exp}\nZip: ${zip}\n\nUpdating map to prioritize local affiliates...`);
-            loadProfileData(); // REFRESH MAP WITH NEW ZIP
+            loadProfileData(); 
         }
+
         // ------------------------------------------------------------------
-        // === II. MAP CODE & ZIP CODE LOGIC (UNCHANGED from last revision) ===
+        // === II. MAP CODE & DATA (ICONOS MEJORADOS) ===
         // ------------------------------------------------------------------
         
         const map = L.map('map').setView([39.8283, -98.5795], 4);
@@ -698,7 +812,7 @@
             { name: "Carolinas Finest", lat: 35.0800, lng: -80.6700, state: "NC", type: "THCA", link: "https://carolinasfinestdispensary.com/?aff=cannagrok", note: "Gastonia" },
             { name: "Great Smoky Cannabis", lat: 35.4317, lng: -83.4497, state: "NC", type: "THCA", link: "https://www.greatsmokycannabisco.com/?aff=cannagrok", note: "Tribal" },
             { name: "Preston Hemp Co", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://prestonhempco.com/?aff=cannagrok", note: "Online Only" },
-            // Sample THC Legal Affiliates (Non-Charlotte) - Keep these Affiliate links
+            // Sample THC Legal Affiliates 
             { name: "MedMen", lat: 34.0928, lng: -118.3587, state: "CA", type: "THC", link: "https://medmen.com/?aff=cannagrok", note: "Los Angeles" },
             { name: "Cookies", lat: 40.7128, lng: -74.0060, state: "NY", type: "THC", link: "https://cookies.co/?aff=cannagrok", note: "Manhattan" },
             { name: "Green Dot Labs", lat: 39.7392, lng: -104.9903, state: "CO", type: "THC", link: "https://greendotlabs.com/?aff=cannagrok", note: "Denver" },
@@ -741,6 +855,7 @@
             });
 
             shopsWithDistance.sort((a, b) => {
+                // Sort Priority: 1. Closest distance, 2. Alphabetical name
                 if (a.distance !== b.distance) {
                     return a.distance - b.distance; 
                 }
@@ -752,43 +867,40 @@
                 
                 const isAffiliate = shop.link.includes("?aff=cannagrok"); 
                 
+                // Iconos con mejor diseño (uso de CSS classes definidas arriba)
                 const icon = isAffiliate 
                     ? L.divIcon({
                         className: 'affiliate-marker',
-                        html: `<div style="background-color:#FFD700; color:#1B5E20; padding:4px 8px; border-radius:5px; font-weight:700; border:2px solid #1B5E20; box-shadow: 0 0 5px #FFD700;">⭐</div>`,
-                        iconSize: [30, 30],
-                        iconAnchor: [15, 15]
+                        html: `<div>⭐ ${shop.type}</div>`, // Estrella dorada para afiliados
+                        iconSize: [80, 20],
+                        iconAnchor: [40, 10]
                       })
                     : L.divIcon({ 
                         className: 'regular-marker',
-                        html: `<div style="background-color:#1B5E20; color:white; padding:4px 8px; border-radius:5px; font-weight:700;">${shop.type}</div>`,
-                        iconSize: [50, 20],
-                        iconAnchor: [25, 10]
+                        html: `<div>🌿 ${shop.type}</div>`, // Hoja verde para no afiliados
+                        iconSize: [80, 20],
+                        iconAnchor: [40, 10]
                       });
 
 
                 const marker = L.marker([shop.lat, shop.lng], { icon: icon });
 
+                // Popup mejorado
                 let popupContent = `
                     <div style="font-family: 'Inter', sans-serif;">
-                        <h4 style="margin: 0 0 5px; color: ${isAffiliate ? '#FFD700' : '#1B5E20'};">${shop.name} ${isAffiliate ? '(Affiliate Deal!)' : ''}</h4>
+                        <h4 style="margin: 0 0 5px; color: ${isAffiliate ? 'var(--gold-accent)' : 'var(--green-dark)'}; border-bottom: 2px solid ${isAffiliate ? 'var(--gold-accent)' : 'var(--green-dark)'}; padding-bottom: 5px;">
+                            ${isAffiliate ? '⭐ AFFILIATE DEAL' : 'DISPENSARY'} | ${shop.name}
+                        </h4>
                         <p style="margin: 0 0 5px; font-size: 0.9em;">
-                            <strong>Type:</strong> ${shop.type}<br>
-                            <strong>Note:</strong> ${shop.note}<br>
+                            <strong>Product:</strong> ${shop.type}<br>
+                            <strong>Details:</strong> ${shop.note}<br>
                             ${shop.distance !== Infinity ? `<strong>Distance:</strong> ${distanceInMiles}<br>` : ''}
                         </p>
                         ${shop.link && shop.link !== '#'
                             ? `<a href="${shop.link}" target="_blank" class="popup-link" style="
-                                display: block; 
-                                margin-top: 10px; 
-                                padding: 8px 12px; 
-                                text-align: center; 
-                                background-color: ${isAffiliate ? '#FFD700' : '#66BB6A'}; 
-                                color: ${isAffiliate ? '#1B5E20' : 'white'};
-                                border-radius: 5px; 
-                                text-decoration: none;
-                                font-weight: 700;
-                                border: ${isAffiliate ? '2px solid #1B5E20' : 'none'};
+                                background-color: ${isAffiliate ? 'var(--gold-accent)' : 'var(--green-light)'};
+                                color: ${isAffiliate ? 'var(--gray-dark)' : 'white'};
+                                border: ${isAffiliate ? '1px solid var(--gray-dark)' : 'none'};
                             ">VIEW STORE / CLAIM DEAL →</a>`
                             : `<p style="margin-top:10px; font-size:0.8em; color:gray;">Link unavailable.</p>`
                         }
@@ -804,14 +916,16 @@
             const localDealsDiv = document.querySelector('#premiumDashboard .dashboard-section:nth-child(4)');
 
             if (premiumStatus === 'unlocked' && localDealsDiv) {
+                // Logic to update local deals based on zip and distance (kept from previous version)
                 const nearestAffiliates = shopsWithDistance.filter(s => s.link.includes("?aff=cannagrok") && s.distance !== Infinity).slice(0, 3);
                 
                 if (nearestAffiliates.length > 0) {
-                    let dealsHtml = `<p style="font-size:0.9em; color:#444;">*Daily alerts on the best local discounts and offers from affiliates near your Zip Code (${localStorage.getItem('profileZip')}).*</p>`;
+                    let dealsHtml = `<p style="font-size:0.9em; color:#444;">*Daily alerts on the best local discounts and offers from affiliates near your Zip Code (${localStorage.getItem('profileZip') || 'N/A'}).*</p><ul>`;
                     nearestAffiliates.forEach(shop => {
                         const distMi = (shop.distance / 1609.34).toFixed(1);
-                        dealsHtml += `<p style="margin: 5px 0;"><strong>🔥 VIP Deal:</strong> ${shop.name} (${distMi} mi) - <a href="${shop.link}" target="_blank" style="color:var(--green-dark); font-weight:700;">View Offer</a></p>`;
+                        dealsHtml += `<li><strong>🔥 VIP Deal:</strong> ${shop.name} (${distMi} mi) - <a href="${shop.link}" target="_blank" style="color:var(--green-dark); font-weight:700;">View Offer</a></li>`;
                     });
+                    dealsHtml += `</ul>`;
                     localDealsDiv.innerHTML = `<h3>Local VIP Deals</h3>${dealsHtml}`;
                 } else {
                      localDealsDiv.innerHTML = `<h3>Local VIP Deals</h3><p style="font-size:0.9em; color:#444;">No affiliates found near your Zip Code.</p>`;
@@ -819,6 +933,7 @@
             }
         }
 
+        // --- Keep centerOnState, filterMap, loadProfileData ---
         function centerOnState() {
             const stateCode = document.getElementById('stateSelect').value;
             const infoDiv = document.getElementById('stateInfo');
@@ -864,6 +979,7 @@
                 currentZipLat = coords[0];
                 currentZipLng = coords[1];
             } else {
+                // Default center if no zip or invalid zip is provided
                 currentZipLat = 35.2271; 
                 currentZipLng = -80.8431; 
             }
@@ -871,10 +987,11 @@
             filterMap();
         }
 
+
         window.onload = function() {
             checkDailyReset();
             updateQueryCounter();
-            checkAccess(); // Determines initial state (Age Gate, Free Map, or Premium)
+            checkAccess(); 
             loadProfileData(); 
         }
         
