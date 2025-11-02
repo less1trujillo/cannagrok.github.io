@@ -1,260 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CannaGrok Chatbot</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body {
-        font-family: sans-serif;
-      }
-      /* For a better scrollbar on webkit browsers */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0D1B2A;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #1B4965;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #4B7E9F;
-      }
-    </style>
-    <!-- Load React and ReactDOM from CDN -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <!-- Load Babel for JSX transpilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CANNAGROK & GROW: AI for legal cannabis. Free chat with Grok. THCA <0.3% nationwide. Powered by Grok & xAI.">
+  <title>CANNAGROK & GROW | AI Legal Cannabis Chat | THCA Strains</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom, #e8f5e9, #c8e6c9); margin: 0; padding: 20px; text-align: center; }
+    h1 { color: #2e7d32; font-size: 48px; margin: 10px 0; }
+    .subtitle { color: #1b5e20; font-size: 24px; font-weight: bold; }
+    .legal { color: #666; font-size: 14px; margin: 10px 0; }
+    .chat { max-width: 600px; margin: 20px auto; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    #messages { height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; border-radius: 10px; margin-bottom: 10px; text-align: left; }
+    .msg { padding: 10px 15px; border-radius: 18px; margin: 5px 0; max-width: 80%; display: inline-block; word-wrap: break-word; }
+    .user { background: #4caf50; color: white; margin-left: auto; }
+    .grok { background: #e0e0e0; color: black; }
+    input { width: 70%; padding: 12px; border: 1px solid #ccc; border-radius: 12px; font-size: 16px; }
+    button { background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+    .premium { background: #fff3e0; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 18px; }
+    .grow-section { background: #c8e6c9; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 600px; }
+    .strains-list { text-align: left; margin: 10px 0; }
+  </style>
 </head>
-  <body class="bg-[#0D1B2A]">
-    <div id="root"></div>
-    <script type="text/babel">
-      // React and ReactDOM are now available globally, no need to import.
-      const { useState, useEffect, useRef } = React;
+<body>
+  <h1>🌿 CANNAGROK & GROW</h1>
+  <p class="subtitle">CANNA → GROK → GROW</p>
+  <p>AI for Legal Cannabis. Free. 21+. THCA <0.3% Nationwide (Farm Bill 2018).</p>
+  <p class="legal">Powered by Grok & xAI. Legal in all 50 states (THCA hemp). Key markets: CA, CO, NY, IL, MI.</p>
 
-      // --- CONSTANTS ---
-      const SALES_LINK = 'https://paypal.me/cannagrok/4.99';
-      const AFFILIATE_LINK = 'https://tucarrd.com/grok-verified-alliances';
-      const GITHUB_RAW_CSV_LINK = "https://raw.githubusercontent.com/less1trujillo/cannagrok.github.io/main/data/terpenome_map.csv";
+  <div class="grow-section">
+    <h2>GROW Section: Top THCA Strains 2025</h2>
+    <div class="strains-list">
+      <p><strong>Blue Dream</strong> (Hybrid, 19.8% THCA): Balanced high. <a href="https://dutchie.com?aff=cannagrok" target="_blank">Buy</a></p>
+      <p><strong>Jealousy</strong> (Hybrid, 21% THCA): Euphoric lift. <a href="https://weedmaps.com?aff=cannagrok" target="_blank">Buy</a></p>
+      <p><strong>White Runtz</strong> (Hybrid, 31.55% THCA): Creamy euphoria. <a href="https://dutchie.com?aff=cannagrok" target="_blank">Buy</a></p>
+      <p><strong>Gorilla Glue #4</strong> (Hybrid, 22% THCA): Potent relaxation. <a href="https://weedmaps.com?aff=cannagrok" target="_blank">Buy</a></p>
+      <p><strong>Gelato 41</strong> (Hybrid, 20% THCA): Creative sweet buzz. <a href="https://dutchie.com?aff=cannagrok" target="_blank">Buy</a></p>
+    </div>
+  </div>
 
-      const PREMIUM_PITCH_MESSAGE = `I apologize. That query requires CannaGrok's live reasoning engine for precision legal analysis and personalized titration protocols. The data complexity exceeds our Open Source model's capacity.\n\nUPGRADE NOW to unlock full Gemini power and secure your Scientific Protocol.\n\n<a href='${SALES_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>UNLOCK CannaGrok PREMIUM - $4.99/mo</a>`;
-      const AFFILIATE_PITCH_MESSAGE = `For verified, compliant accessories, visit our Educational Alliances Hub.\n\n<a href='${AFFILIATE_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>View Verified Alliances</a>`;
-      const MAP_DOWNLOAD_MESSAGE = `Here is the direct download link for the free Terpenome Map CSV:\n\n<a href='${GITHUB_RAW_CSV_LINK}' target='_blank' style='color:#FFD700; font-weight:bold;'>Download Terpenome_Map.csv</a>`;
+  <div class="chat">
+    <div id="messages"></div>
+    <div style="display: flex; gap: 5px;">
+      <input type="text" id="input" placeholder="Ask Grok about THCA strains..." />
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
 
-      // --- CHATBOT SERVICE LOGIC ---
-      const premiumKeywords = ['titration', 'federal law', 'interstate', 'personalized dose', 'custom blend', 'legal advice'];
-      const affiliateKeywords = ['vape', 'oil', 'anxiety', 'accessories', 'cbd', 'buy', 'shop'];
-      const mapKeywords = ['map', 'terpenome', 'csv', 'download'];
+  <div class="premium">
+    <a href="https://paypal.me/cannagrok/4.99" target="_blank"
+       style="background:#ff9800;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">
+       PREMIUM $4.99/mo - Unlock GROW Plans
+    </a>
+    <p>Personalized dosage, tracker, voice with Grok.</p>
+  </div>
 
-      const knowledgeBase = {
-        'myrcene': "**Myrcene** is one of the most common terpenes found in cannabis. \nIt's known for its earthy, musky notes, reminiscent of cloves. Some believe it promotes calming effects.",
-        'limonene': "**Limonene** is a terpene with a distinct citrusy aroma, like lemons or oranges. \nIt's often associated with mood elevation and stress relief.",
-        'linalool': "**Linalool** has a floral, spicy scent similar to lavender. \nIt is commonly associated with relaxing and sedative properties.",
-        'caryophyllene': "**Beta-caryophyllene** is unique because it's the only terpene known to also act as a cannabinoid. \nIt has a peppery, spicy aroma and may have anti-inflammatory benefits.",
-        'pinene': "**Pinene**, as the name suggests, has a strong scent of pine trees. \nIt is associated with alertness and memory retention.",
-        'dosing': "A standard starting dose for cannabis edibles is typically **5mg of THC**. \nIt's crucial to 'start low and go slow,' waiting at least 2 hours before considering an additional dose.",
-        'edible onset': "Edibles can take anywhere from **30 minutes to 2 hours** to take effect. \nFactors like metabolism and stomach contents can influence onset time.",
-        'compliance': "In most U.S. states with legal cannabis, the personal possession limit for adults is **1 ounce (approx. 28 grams)** of cannabis flower.",
-        'medical vs recreational': "**Medical cannabis** requires a doctor's recommendation for specific conditions, while **recreational cannabis** is available for adults (usually 21+) in legal states.",
-        'quality': "High-quality FlowerForm is characterized by a potent aroma, visible **trichomes** (the crystal-like coating), and a healthy, vibrant color. It should feel slightly sticky, not overly dry or wet.",
-        'trichomes': "**Trichomes** are the small, crystal-like glands on the surface of cannabis flowers that produce cannabinoids and terpenes. A high density of trichomes often indicates higher potency.",
-        'curing': "**Curing** is the process of slowly drying and aging cannabis flowers after harvest. \nProper curing develops the flower's flavor and aroma while preserving cannabinoids and terpenes.",
-        'sativa vs indica': "Traditionally, **Sativa** strains were associated with uplifting, energetic effects, while **Indica** strains were linked to relaxation and sedation. \nHowever, modern science suggests that terpene and cannabinoid profiles are more important predictors of effects.",
-        'cbd vs thc': "**THC (Tetrahydrocannabinol)** is the primary psychoactive compound in cannabis. \n**CBD (Cannabidiol)** is non-psychoactive and is studied for its potential therapeutic benefits, such as reducing anxiety and inflammation.",
-        'entourage effect': "The **Entourage Effect** is the theory that various cannabis compounds (cannabinoids, terpenes) work together synergistically to produce a greater effect than any single compound on its own.",
-        'help': "You can ask me about topics like: \n- Basic Terpenes (Myrcene, Limonene) \n- Standard Dosing \n- Basic State Compliance \n- FlowerForm Quality \n- Download the Terpenome Map"
-      };
+  <script>
+    const msgDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
 
-      const defaultResponse = "I'm sorry, I don't have information on that topic. My knowledge is limited to basic terpenes, dosing, compliance, and quality. \nFor more complex questions, consider our Premium service.";
+    function addMsg(text, isUser = false) {
+      const div = document.createElement('div');
+      div.className = `msg ${isUser ? 'user' : 'grok'}`;
+      div.innerHTML = text.replace(/\n/g, '<br>');
+      msgDiv.appendChild(div);
+      msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
 
-      const processMessage = async (input) => {
-        const lowercasedInput = input.toLowerCase();
-
-        return new Promise(resolve => {
-          setTimeout(() => {
-            if (premiumKeywords.some(keyword => lowercasedInput.includes(keyword))) {
-              resolve(PREMIUM_PITCH_MESSAGE);
-              return;
-            }
-            if (affiliateKeywords.some(keyword => lowercasedInput.includes(keyword))) {
-              resolve(AFFILIATE_PITCH_MESSAGE);
-              return;
-            }
-            if (mapKeywords.some(keyword => lowercasedInput.includes(keyword))) {
-              resolve(MAP_DOWNLOAD_MESSAGE);
-              return;
-            }
-            for (const key in knowledgeBase) {
-              if (lowercasedInput.includes(key)) {
-                resolve(knowledgeBase[key]);
-                return;
-              }
-            }
-            resolve(defaultResponse);
-          }, 1000 + Math.random() * 500); // Simulate AI thinking time
-        });
-      };
-      
-      // --- COMPONENTS ---
-      const ChatMessage = ({ message }) => {
-        const isUser = message.author === 'user';
-        const formatMessage = (text) => {
-          let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-          formattedText = formattedText.replace(/\\n/g, '<br />');
-          return formattedText;
-        };
-
-        const baseClasses = "max-w-md md:max-w-lg lg:max-w-xl p-4 rounded-xl shadow-md text-sm md:text-base leading-relaxed break-words";
-        const userClasses = `bg-[#4B7E9F] text-white self-end rounded-br-none`;
-        const aiClasses = `bg-[#EFEFEF] text-gray-800 self-start rounded-bl-none border-l-4 border-[#FFD700]`;
-
-        return (
-          <div className={`my-2 flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-            <div 
-              className={`${baseClasses} ${isUser ? userClasses : aiClasses}`}
-              dangerouslySetInnerHTML={{ __html: formatMessage(message.text) }}
-            />
-          </div>
-        );
-      };
-
-      const ChatInput = ({ onSend, isLoading }) => {
-        const [inputValue, setInputValue] = useState('');
-
-        const handleSubmit = (e) => {
-          e.preventDefault();
-          if (inputValue.trim() && !isLoading) {
-            onSend(inputValue.trim());
-            setInputValue('');
-          }
-        };
-
-        return (
-          <form onSubmit={handleSubmit} className="p-4 bg-[#0D1B2A] border-t border-[#1B4965]">
-            <div className="flex items-center space-x-3 bg-[#1B4965] rounded-full p-2">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask about terpenes, dosing..."
-                className="flex-grow bg-transparent text-white placeholder-gray-400 focus:outline-none px-4"
-                disabled={isLoading}
-              />
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="bg-[#FFD700] text-[#0D1B2A] rounded-full p-2 w-10 h-10 flex items-center justify-center font-bold hover:bg-yellow-300 transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-          </form>
-        );
-      };
-      
-      const TypingIndicator = () => {
-        return (
-          <div className="flex items-center space-x-1 p-4">
-              <div className="bg-[#EFEFEF] rounded-full p-3 shadow-md border-l-4 border-[#FFD700]">
-                  <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse"></div>
-                      <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse [animation-delay:0.2s]"></div>
-                      <div className="w-2 h-2 rounded-full bg-gray-500 animate-pulse [animation-delay:0.4s]"></div>
-                  </div>
-              </div>
-          </div>
-        );
-      };
-
-      // --- MAIN APP COMPONENT ---
-      const App = () => {
-        const [messages, setMessages] = useState([
-          {
-            id: 'init',
-            author: 'ai',
-            text: "Welcome to **CannaGrok**. \nI can provide educational information on basic cannabis science. Ask me about terpenes, dosing, or quality. For complex legal and medical queries, an upgrade to our Premium AI is required. Type 'help' for topics.",
-          },
-        ]);
-        const [isLoading, setIsLoading] = useState(false);
-        const messagesEndRef = useRef(null);
-
-        const scrollToBottom = () => {
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        useEffect(() => {
-          scrollToBottom();
-        }, [messages, isLoading]);
-
-        const handleSend = async (userMessage) => {
-          const newUserMessage = {
-            id: Date.now().toString(),
-            author: 'user',
-            text: userMessage,
-          };
-          setMessages(prev => [...prev, newUserMessage]);
-
-          setIsLoading(true);
-
-          const aiResponseText = await processMessage(userMessage);
-
-          const newAiMessage = {
-            id: (Date.now() + 1).toString(),
-            author: 'ai',
-            text: aiResponseText,
-          };
-          
-          setMessages(prev => [...prev, newAiMessage]);
-          setIsLoading(false);
-        };
-
-        return (
-          <div className="bg-[#0D1B2A] text-white flex flex-col h-screen">
-            <header className="bg-[#1B4965] p-4 text-center shadow-lg">
-              <h1 className="text-xl md:text-2xl font-bold tracking-wider text-[#FFD700]">
-                Canna<span className="text-white">Grok</span>
-              </h1>
-              <p className="text-xs text-gray-300">Open Source Educational Model</p>
-            </header>
-            
-            <main className="flex-grow p-2 md:p-4 overflow-y-auto">
-              <div className="max-w-4xl mx-auto w-full">
-                {messages.map(msg => (
-                  <ChatMessage key={msg.id} message={msg} />
-                ))}
-                {isLoading && <TypingIndicator />}
-                <div ref={messagesEndRef} />
-              </div>
-            </main>
-
-            <footer className="sticky bottom-0 left-0 right-0">
-              <div className="max-w-4xl mx-auto w-full">
-                <ChatInput onSend={handleSend} isLoading={isLoading} />
-              </div>
-            </footer>
-          </div>
-        );
-      };
-
-      // --- RENDER THE APP ---
-      const rootElement = document.getElementById('root');
-      if (!rootElement) {
-        throw new Error("Could not find root element to mount to");
+    function grokReply(q) {
+      q = q.toLowerCase();
+      if (q.includes('thca') || q.includes('strain')) {
+        return `THCA Legal Nationwide (<0.3% Δ9-THC dry weight, Farm Bill 2018).<br><br>
+        Top pick: <strong>Blue Dream</strong> (19.8% THCA, Hybrid) - Balanced, creative.<br>
+        Legal in all 50 states. <a href="https://dutchie.com?aff=cannagrok" target="_blank">Buy Now</a><br><br>
+        Premium: Your GROW plan (dosis + tracker) → <a href="https://paypal.me/cannagrok/4.99">$4.99</a>`;
       }
+      return `Hi! I'm Grok in CANNAGROK.<br>Ask about THCA strains, legal markets (CA, CO, NY), or GROW plans.<br><br>
+      <a href="https://paypal.me/cannagrok/4.99" target="_blank">Premium $4.99</a>`;
+    }
 
-      const root = ReactDOM.createRoot(rootElement);
-      root.render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      );
-    </script>
-  </body>
+    function send() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMsg(text, true);
+      input.value = '';
+      addMsg('Thinking...', false);
+      setTimeout(() => {
+        msgDiv.lastChild.remove();
+        addMsg(grokReply(text), false);
+      }, 800);
+    }
+
+    input.addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
+    addMsg('Welcome to CANNAGROK & GROW! Ask about legal THCA strains.', false);
+  </script>
+</body>
 </html>
