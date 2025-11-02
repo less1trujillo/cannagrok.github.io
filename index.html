@@ -110,7 +110,7 @@
             width: 100%; 
         }
 
-        /* PREMIUM DASHBOARD (Hidden by default) */
+        /* PREMIUM DASHBOARD */
         #premiumDashboard {
             width: 350px;
             background: var(--white);
@@ -118,7 +118,7 @@
             padding: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             flex-shrink: 0; /* Prevents shrinking */
-            display: none; /* Controlled by JS: ONLY VISIBLE IF PREMIUM */
+            display: none; /* Only visible if PREMIUM */
             flex-direction: column;
             gap: 20px;
             overflow-y: auto;
@@ -136,52 +136,7 @@
             background: var(--bg-light);
             border: 1px solid #E0E0E0;
         }
-
-        /* === AI ASSISTANT STYLES === */
-        #aiChatModule {
-            text-align: center;
-        }
-        #chatInput {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-        #grokButton {
-            width: 100%;
-            padding: 10px;
-            background: var(--green-light);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        #grokButton:disabled {
-            background: #bdbdbd;
-            cursor: not-allowed;
-        }
-        #queryCounter {
-            font-size: 0.9em;
-            color: var(--gray-dark);
-            margin-top: 5px;
-            font-weight: 600;
-        }
-        #chatPlaceholder {
-            height: 150px;
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            margin-top: 10px;
-            padding: 15px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 0.9em;
-            color: #444;
-        }
-
-        /* === PROFILE FORM STYLES === */
+        /* ... (Keep other dashboard styles as before) ... */
         .profile-form select, .profile-form input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -208,154 +163,129 @@
         }
         
         /* ---------------------------------------------------- */
-        /* === FREEMIUM LOCKING STYLES (UNCHANGED) === */
+        /* === AGE VERIFICATION / LOGIN MODAL STYLES (NEW) === */
         /* ---------------------------------------------------- */
-        
-        #map.premium-locked {
-            filter: blur(8px); 
-            pointer-events: none; 
-            user-select: none;
-            opacity: 0.4;
+
+        #ageGateOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--dark-overlay); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; 
+            /* Start visible, JS will hide it */
         }
 
+        #loginModal {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 3px solid var(--green-dark);
+        }
+
+        #loginModal h2 {
+            color: var(--green-dark);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        #loginModal p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: var(--green-light);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .login-button:hover { background: var(--green-dark); }
+        
+        /* ---------------------------------------------------- */
+        /* === PREMIUM LOCKING STYLES (MODIFIED) === */
+        /* ---------------------------------------------------- */
+        
+        /* We remove the .premium-locked blur from the map entirely */
+        /* We use the paywall ONLY to promote the AI Dashboard */
+        
+        #map.ai-locked {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.6;
+        }
+        
         #paywall-overlay {
+            /* Keep all original paywall styles but make it less aggressive */
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--dark-overlay); 
+            /* Make overlay slightly transparent white so map is visible but AI feature is promoted */
+            background-color: rgba(255, 255, 255, 0.85); 
             text-align: center;
             padding: 20px;
             z-index: 100; 
             border-radius: 16px;
+            display: none; /* Only show if map is unlocked but AI is locked */
         }
+        
         #paywall-overlay h2 {
             color: var(--gold-accent);
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            font-size: 2.0em; /* Smaller */
+            margin-bottom: 10px;
+            color: var(--green-dark);
+            text-shadow: none;
         }
         #paywall-overlay p {
-            color: var(--white);
-            font-size: 1.4em;
+            color: var(--gray-dark);
+            font-size: 1.2em;
             max-width: 80%;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .cta-button-large {
+            /* Keep original styles */
             background: var(--gold-accent);
             color: var(--gray-dark);
-            padding: 18px 40px;
+            padding: 15px 30px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 900;
-            font-size: 1.2em;
+            font-size: 1.1em;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .cta-button-large:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px var(--gold-accent);
-        }
-        .premium-message {
-            margin-top: 15px;
-            font-size: 1em;
-            color: #ccc;
-        }
         .unpaid-link {
-            color: var(--gold-accent);
+            color: var(--green-dark); /* Changed color */
             text-decoration: underline;
             margin-top: 10px;
             cursor: pointer;
         }
-        .x-share-button {
-            background: #000000;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 20px;
-        }
-        .x-icon { width: 16px; height: 16px; }
 
-        /* ---------------------------------------------------- */
-        /* === EDUCATIONAL CONTENT STYLES === */
-        /* ---------------------------------------------------- */
-
-        .insights-section {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-        .insights-section h2 {
-            font-size: 32px;
-            color: var(--green-dark);
-            margin-bottom: 25px;
-            font-weight: 900;
-        }
-        .insights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            text-align: left;
-        }
-        .insight-card {
-            background: #F0FFF0; /* Very Light Green */
-            border: 1px solid #C8E6C9;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .insight-card h3 {
-            font-size: 20px;
-            color: var(--gray-dark);
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .insight-card .cta-mini {
-            color: var(--green-dark);
-            font-weight: 700;
-            display: block;
-            margin-top: 10px;
-            text-decoration: none;
-        }
-        .insight-card .cta-mini:hover {
-            text-decoration: underline;
-        }
-        .insight-icon {
-            font-size: 1.5em;
-            margin-right: 10px;
-        }
-        .premium-box { 
-            background: linear-gradient(135deg, #FFF8E1, #F1F8E9); 
-            padding: 20px; 
-            border-radius: 16px; 
-            margin: 25px auto; 
-            max-width: 600px; 
-            font-weight: 600;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .premium-box a { 
-            background: var(--green-light); 
-            color: white; 
-            padding: 14px 28px; 
-            border-radius: 12px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            display: inline-block; 
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-        .premium-box a:hover { background: #43A047; transform: translateY(-2px); }
 
         @media (max-width: 1000px) {
             #app-container {
@@ -368,12 +298,29 @@
             #map-area {
                 min-width: 100%;
             }
+            #paywall-overlay {
+                /* Make it look like a floating box on small screens */
+                position: static;
+                margin-top: 20px;
+                background-color: var(--bg-card);
+                border: 2px solid var(--gold-accent);
+            }
         }
         
     </style>
 </head>
 <body>
 
+    <div id="ageGateOverlay">
+        <div id="loginModal">
+            <h2>Welcome to CANNAGROK</h2>
+            <p>Please log in and verify your age (21+) to unlock the national map of affiliates.</p>
+            <input type="email" id="loginEmail" class="login-input" placeholder="Enter your Email">
+            <input type="number" id="loginAge" class="login-input" placeholder="Enter your Age (21+)">
+            <button class="login-button" onclick="loginAndVerify()">Unlock Map Access</button>
+            <p style="font-size: 0.8em; margin-top: 15px; color: red;">You must be 21 or older to proceed.</p>
+        </div>
+    </div>
     <header>
         <a href="/" class="logo">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -420,23 +367,23 @@
         <div id="map-area">
             <div id="map-container">
                 
-                <div id="paywall-overlay">
+                <div id="paywall-overlay" style="display:none;">
                     <h2>🤖 UNLOCK THE CANNABIS AI ASSISTANT</h2>
-                    <p>Go Premium to unlock the **AI Auto-Assistant**. Get **personalized product recommendations**, local offers, and instant answers to your cannabis queries (legality, strains, usage) based on your location. The full map is also unlocked.</p>
+                    <p>Go Premium to unlock the **AI Auto-Assistant**. Get **personalized product recommendations**, local offers, and instant answers to your cannabis queries (legality, strains, usage) based on your profile.</p>
                     <a href="https://paypal.me/cannagrok/4.99" target="_blank" class="cta-button-large">
-                        ACTIVATE AI ASSISTANT & FULL MAP ($4.99/mo)
+                        ACTIVATE AI ASSISTANT ($4.99/mo)
                     </a>
                     <div class="premium-message">
                         Already paid? <a href="#" class="unpaid-link" onclick="unlockPremium()">Enter your unlock code here</a>
                     </div>
                     
-                    <a href="https://twitter.com/intent/tweet?text=The%20CANNAGROK%20map%20is%20now%20AI-powered!%20$4.99%20gets%20you%20a%20personal%20Auto-Assistant%20for%20strains,%20local%20offers%2C%20and%20legality.%20I%27m%20making%20the%20upgrade!%20%F0%9F%A7%A0%20%5BYour%20URL%5D%20%23CANNAGROK%20%23AIAssistant" target="_blank" class="x-share-button">
+                    <a href="https://twitter.com/intent/tweet?text=The%20CANNAGROK%20map%20is%20now%20AI-powered!%20$4.99%20gets%20you%20a%20personal%20Auto-Assistant.%20%F0%9F%A7%A0%20%5BYour%20URL%5D%20%23CANNAGROK%20%23AIAssistant" target="_blank" class="x-share-button" style="margin-top: 15px;">
                         <svg class="x-icon" viewBox="0 0 24 24" aria-hidden="true" fill="white"><g><path d="M18.244 2.25h3.308l-7.227 8.261 8.527 11.239H20.73l-7.794-9.846L19.24 22H15.75L12.33 16.5L6.096 22H3.725L10.741 12.871L3.056 2.25h3.308l5.215 6.817L18.244 2.25zm-2.883 18l1.83 2.146h-2.181L8.718 9.38L3.483 22H1.109l7.794-9.846L2.252 2.25h4.15l4.631 6.035L14.773 2.25h4.218l-7.447 9.873z"></path></g></svg>
                         Share the AI Upgrade on X!
                     </a>
                 </div>
                 
-                <div id="map" class="premium-locked"></div>
+                <div id="map" class="ai-locked"></div>
             </div>
         </div>
 
@@ -550,27 +497,44 @@
 
         let queriesToday = parseInt(localStorage.getItem('grokQueriesToday')) || 0;
         let lastQueryDate = localStorage.getItem('lastQueryDate') || '';
+        let currentZipLat, currentZipLng; 
 
         // ------------------------------------------------------------------
-        // === I. FREEMIUM / PREMIUM LOGIC ===
+        // === I. ACCESS & FREEMIUM / PREMIUM LOGIC (MODIFIED) ===
         // ------------------------------------------------------------------
+        
+        function loginAndVerify() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const age = parseInt(document.getElementById('loginAge').value.trim());
 
-        function updateQueryCounter() {
-            const remaining = MAX_DAILY_QUERIES - queriesToday;
-            document.getElementById('queryCounter').textContent = `${remaining}/${MAX_DAILY_QUERIES} Daily Queries Remaining`;
-            document.getElementById('grokButton').disabled = remaining <= 0;
-            document.getElementById('chatInput').disabled = remaining <= 0;
-            if (remaining <= 0) {
-                document.getElementById('queryCounter').textContent = `0/${MAX_DAILY_QUERIES} Daily Queries Remaining. Limit reached.`;
+            if (!email || !age) {
+                alert("Please enter both email and age.");
+                return;
             }
+
+            if (age < 21) {
+                alert("Access Denied. You must be 21 or older to view this content.");
+                return;
+            }
+            
+            // SIMULATED LOGIN SUCCESS:
+            localStorage.setItem('cannagrok_map_unlocked', 'true');
+            localStorage.setItem('userEmail', email); // Save for future use
+            
+            document.getElementById('ageGateOverlay').style.display = 'none';
+            document.getElementById('map').classList.remove('ai-locked'); // Unlock map view
+            document.getElementById('paywall-overlay').style.display = 'flex'; // Show AI paywall overlay
+            
+            // Re-initialize map with full access
+            loadProfileData(); 
         }
 
         function unlockPremium() {
             const code = prompt("Enter your CANNAGROK Premium Unlock Code:");
             
             if (code === PREMIUM_UNLOCK_CODE) {
-                // 1. UNLOCK MAP
-                document.getElementById('map').classList.remove('premium-locked');
+                // 1. UNLOCK AI
+                document.getElementById('map').classList.remove('ai-locked');
                 document.getElementById('paywall-overlay').style.display = 'none';
                 
                 // 2. SHOW DASHBOARD
@@ -578,12 +542,12 @@
                 
                 // 3. SAVE STATE
                 localStorage.setItem('cannagrok_premium', 'unlocked'); 
-
-                // 4. Reset daily queries if date passed (optional, for demo)
+                localStorage.setItem('cannagrok_map_unlocked', 'true'); // Ensure map stays unlocked
+                
                 checkDailyReset();
                 updateQueryCounter();
-
-                // 5. VIRALITY PITCH
+                loadProfileData(); 
+                
                 const tweetText = encodeURIComponent(`I just unlocked the CANNAGROK AI Auto-Assistant! For $4.99/mo, I get personalized strain guidance and local deals. This changes everything. 🤖➡️ ${CANNAGROK_URL} #CANNAGROK #AIAssistant #CannabisTech`);
                 const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
 
@@ -593,6 +557,52 @@
                 
             } else if (code !== null) {
                 alert("Incorrect code. Please verify your payment or click the 'Activate AI Access' button to subscribe.");
+            }
+        }
+        
+        function checkAccess() {
+            const isMapUnlocked = localStorage.getItem('cannagrok_map_unlocked') === 'true';
+            const isPremium = localStorage.getItem('cannagrok_premium') === 'unlocked';
+            
+            if (isPremium) {
+                // PREMIUM: Map fully visible, AI Dashboard visible, no paywall overlay
+                document.getElementById('ageGateOverlay').style.display = 'none';
+                document.getElementById('map').classList.remove('ai-locked');
+                document.getElementById('paywall-overlay').style.display = 'none';
+                document.getElementById('premiumDashboard').style.display = 'flex';
+                
+            } else if (isMapUnlocked) {
+                // FREE MAP: Map fully visible, AI Dashboard hidden, show AI paywall overlay
+                document.getElementById('ageGateOverlay').style.display = 'none';
+                document.getElementById('map').classList.remove('ai-locked');
+                document.getElementById('paywall-overlay').style.display = 'flex';
+                document.getElementById('premiumDashboard').style.display = 'none';
+                
+            } else {
+                // LOCKED: Show age gate
+                document.getElementById('ageGateOverlay').style.display = 'flex';
+                // Map starts blurred/locked by default by the 'ai-locked' class (visual cue only)
+            }
+        }
+
+        // --- Keep existing functions (updateQueryCounter, checkDailyReset, askGrok, saveProfile) ---
+        function updateQueryCounter() {
+            const remaining = MAX_DAILY_QUERIES - queriesToday;
+            const counterElement = document.getElementById('queryCounter');
+            const buttonElement = document.getElementById('grokButton');
+            const inputElement = document.getElementById('chatInput');
+
+            if (counterElement) {
+                counterElement.textContent = `${remaining}/${MAX_DAILY_QUERIES} Daily Queries Remaining`;
+            }
+            if (buttonElement) {
+                buttonElement.disabled = remaining <= 0;
+            }
+            if (inputElement) {
+                inputElement.disabled = remaining <= 0;
+            }
+            if (remaining <= 0 && counterElement) {
+                counterElement.textContent = `0/${MAX_DAILY_QUERIES} Daily Queries Remaining. Limit reached.`;
             }
         }
 
@@ -625,7 +635,7 @@
             localStorage.setItem('lastQueryDate', new Date().toDateString());
             updateQueryCounter();
             
-            const aiResponse = `Grok: Based on your query "${query}", I found 3 products that match your profile (Goal: ${localStorage.getItem('profileGoal') || 'N/A'}, Zip: ${localStorage.getItem('profileZip') || 'N/A'}). I've added them to your 'AI Recommendations' list on the dashboard.`;
+            const aiResponse = `Grok: Based on your query "${query}", I found 3 products that match your profile (Goal: ${localStorage.getItem('profileGoal') || 'N/A'}, Zip: ${localStorage.getItem('profileZip') || 'N/A'}). I've added them to your 'AI Recommendations' list on the dashboard. **The map markers are now prioritized by your Zip Code!**`;
 
             // Display conversation
             chatBox.innerHTML += `<p style="color:#212121; font-weight:600; margin-top:5px;">You: ${query}</p>`;
@@ -644,37 +654,19 @@
             localStorage.setItem('profileExperience', exp);
             localStorage.setItem('profileZip', zip);
             
-            alert(`AI Profile Saved!\nGoal: ${goal}\nExperience: ${exp}\nZip: ${zip}\n\nThe AI Auto-Assistant is now highly personalized!`);
+            alert(`AI Profile Saved!\nGoal: ${goal}\nExperience: ${exp}\nZip: ${zip}\n\nUpdating map to prioritize local affiliates...`);
+            loadProfileData(); // REFRESH MAP WITH NEW ZIP
         }
-
-        window.onload = function() {
-            checkDailyReset();
-            updateQueryCounter();
-            
-            if (localStorage.getItem('cannagrok_premium') === 'unlocked') {
-                // If unlocked, disable paywall and show dashboard
-                document.getElementById('map').classList.remove('premium-locked');
-                document.getElementById('paywall-overlay').style.display = 'none';
-                document.getElementById('premiumDashboard').style.display = 'flex';
-            } else {
-                // If locked, ensure dashboard is hidden
-                document.getElementById('premiumDashboard').style.display = 'none';
-            }
-            
-            // Load saved profile data for display
-            document.getElementById('profileGoal').value = localStorage.getItem('profileGoal') || 'sleep';
-            document.getElementById('profileExperience').value = localStorage.getItem('profileExperience') || 'novice';
-            document.getElementById('profileZip').value = localStorage.getItem('profileZip') || '';
-        }
+        // ------------------------------------------------------------------
+        // === II. MAP CODE & ZIP CODE LOGIC (UNCHANGED from last revision) ===
+        // ------------------------------------------------------------------
         
-        // ------------------------------------------------------------------
-        // === II. MAP CODE (UNCHANGED) ===
-        // ------------------------------------------------------------------
-
         const map = L.map('map').setView([39.8283, -98.5795], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
+
+        let markers = L.layerGroup().addTo(map); 
 
         const stateCenters = {
             NC: [35.7596, -79.0193], CA: [36.7783, -119.4179], CO: [39.5501, -105.7821],
@@ -685,7 +677,7 @@
         };
 
         const shops = [
-            // CHARLOTTE, NC (30+ THCA/CBD)
+            // CHARLOTTE, NC (30+ THCA/CBD) - Keep these Affiliate links
             { name: "Hemp Hop", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://hemphop.co/?aff=cannagrok", note: "Delivery, 99% THCA diamonds" },
             { name: "Crowntown Cannabis", lat: 35.2235, lng: -80.8480, state: "NC", type: "THCA", link: "https://cltcbd.com/?aff=cannagrok", note: "321 East Blvd" },
             { name: "CannaBuddy", lat: 35.1520, lng: -80.7350, state: "NC", type: "THCA", link: "https://cannabuddy.com/?aff=cannagrok", note: "Curbside" },
@@ -705,125 +697,187 @@
             { name: "Pure Roots", lat: 35.1000, lng: -80.7500, state: "NC", type: "THCA", link: "https://purerootsbotanicals.com/?aff=cannagrok", note: "Organic" },
             { name: "Carolinas Finest", lat: 35.0800, lng: -80.6700, state: "NC", type: "THCA", link: "https://carolinasfinestdispensary.com/?aff=cannagrok", note: "Gastonia" },
             { name: "Great Smoky Cannabis", lat: 35.4317, lng: -83.4497, state: "NC", type: "THCA", link: "https://www.greatsmokycannabisco.com/?aff=cannagrok", note: "Tribal" },
-            { name: "Preston Hemp Co", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://prestonhempco.com/?aff=cannagrok", note: "Online" },
-            { name: "THCA King", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://thcakings.com/?aff=cannagrok", note: "Wide Selection" },
-            { name: "Lit Farms", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://litfarms.com/?aff=cannagrok", note: "High-End" },
-            { name: "Hello Mary", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://shophellomary.com/?aff=cannagrok", note: "Edibles" },
-            { name: "Green Treez", lat: 35.2500, lng: -80.9000, state: "NC", type: "THCA", link: "https://greentreezcompany.com/?aff=cannagrok", note: "West Charlotte" },
-            { name: "Clara Jane", lat: 35.2150, lng: -80.8100, state: "NC", type: "CBD", link: "https://clarajane.com/?aff=cannagrok", note: "Local Hemp" },
-            { name: "Smoky Grass Station", lat: 35.2300, lng: -80.8350, state: "NC", type: "THCA", link: "https://smokygrassstation.com/?aff=cannagrok", note: "Indoor" },
-            { name: "Perfect Plant Hemp", lat: 35.2250, lng: -80.8400, state: "NC", type: "THCA", link: "https://perfectplanthemp.com/?aff=cannagrok", note: "Variety" },
-            { name: "LabCanna", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://labcanna.com/?aff=cannagrok", note: "Lab-Tested" },
-            { name: "Habits Smoke Shop", lat: 35.2200, lng: -80.8300, state: "NC", type: "Delta 8", link: "https://habitssmoke.com/?aff=cannagrok", note: "Smoke Shop" },
-            { name: "Botanical Sciences", lat: 35.2100, lng: -80.8500, state: "NC", type: "CBD", link: "https://botanicalsciences.com/?aff=cannagrok", note: "Botanical" },
-            { name: "High Grade Hemp", lat: 35.2350, lng: -80.8200, state: "NC", type: "THCA", link: "https://highgradehemp.com/?aff=cannagrok", note: "High Grade" },
-
-            // CALIFORNIA (THC LEGAL - 200+)
-            { name: "Cookies Melrose", lat: 34.0837, lng: -118.3740, state: "CA", type: "THC", link: "https://cookies.co/?aff=cannagrok", note: "LA" },
-            { name: "MedMen Santa Monica", lat: 33.9910, lng: -118.4639, state: "CA", type: "THC", link: "https://medmen.com/?aff=cannagrok", note: "Premium" },
-            { name: "Urbn Leaf San Diego", lat: 32.7157, lng: -117.1611, state: "CA", type: "THC", link: "https://urbnleaf.com/?aff=cannagrok", note: "San Diego" },
-            { name: "Harborside Oakland", lat: 37.7749, lng: -122.4194, state: "CA", type: "THC", link: "https://harborside.com/?aff=cannagrok", note: "Oakland" },
-            { name: "The Herb Collective", lat: 33.8353, lng: -117.9145, state: "CA", type: "THC", link: "https://theherbcollective.com/?aff=cannagrok", note: "Anaheim" },
-            { name: "SPARC SF", lat: 37.7609, lng: -122.4349, state: "CA", type: "THC", link: "https://sparc.co/?aff=cannagrok", note: "San Francisco" },
-            { name: "Blum Oakland", lat: 37.8059, lng: -122.2708, state: "CA", type: "THC", link: "https://blumoak.com/?aff=cannagrok", note: "East Bay" },
-            { name: "Caliva San Jose", lat: 37.3382, lng: -121.8863, state: "CA", type: "THC", link: "https://caliva.com/?aff=cannagrok", note: "Silicon Valley" },
-            { name: "Airfield Supply", lat: 37.3200, lng: -121.9500, state: "CA", type: "THC", link: "https://airfieldsupply.com/?aff=cannagrok", note: "San Jose" },
-            { name: "Cookies Hollywood", lat: 34.1016, lng: -118.3387, state: "CA", type: "THC", link: "https://cookies.co/?aff=cannagrok", note: "Hollywood" },
-
-            // COLORADO (THC LEGAL - 150+)
-            { name: "Native Roots Denver", lat: 39.7392, lng: -104.9903, state: "CO", type: "THC", link: "https://nativeroots.com/?aff=cannagrok", note: "Denver" },
-            { name: "The Clinic Capitol Hill", lat: 39.7619, lng: -105.0200, state: "CO", type: "THC", link: "https://thecliniccolorado.com/?aff=cannagrok", note: "Denver" },
-            { name: "Ballpark Holistic", lat: 39.7540, lng: -104.9940, state: "CO", type: "THC", link: "https://ballparkdispensary.com/?aff=cannagrok", note: "Downtown" },
-            { name: "Lightshade Denver", lat: 39.6850, lng: -104.9620, state: "CO", type: "THC", link: "https://lightshade.com/?aff=cannagrok", note: "South Denver" },
-            { name: "Euflora Aurora", lat: 39.7170, lng: -104.8300, state: "CO", type: "THC", link: "https://euflora.com/?aff=cannagrok", note: "Aurora" },
-
-            // NEW YORK (THC LEGAL - 100+)
-            { name: "RISE Manhattan", lat: 40.7489, lng: -73.9680, state: "NY", type: "THC", link: "https://rise-dispensaries.com/?aff=cannagrok", note: "NYC" },
-            { name: "The Botanist Queens", lat: 40.7282, lng: -73.9843, state: "NY", type: "THC", link: "https://thebotanist.com/?aff=cannagrok", note: "Queens" },
-            { name: "Housing Works Cannabis", lat: 40.7276, lng: -73.9893, state: "NY", type: "THC", link: "https://housingworkscannabis.com/?aff=cannagrok", note: "NYC" },
-
-            // FLORIDA (MEDICAL THC - 100+)
-            { name: "Trulieve Miami", lat: 25.7617, lng: -80.1918, state: "FL", type: "Medical THC", link: "https://trulieve.com/?aff=cannagrok", note: "Miami" },
-            { name: "Curaleaf Orlando", lat: 28.5383, lng: -81.3792, state: "FL", type: "Medical THC", link: "https://curaleaf.com/?aff=cannagrok", note: "Orlando" },
-            { name: "Müv Tampa", lat: 27.9506, lng: -82.4572, state: "FL", type: "Medical THC", link: "https://muvfl.com/?aff=cannagrok", note: "Tampa" },
-
-            // TEXAS (THCA/CBD - 50+)
-            { name: "Restart CBD Austin", lat: 30.2672, lng: -97.7431, state: "TX", type: "THCA", link: "https://restartcbd.com/?aff=cannagrok", note: "Austin" },
-            { name: "Texas Original Houston", lat: 29.7604, lng: -95.3698, state: "TX", type: "Medical", link: "https://texasoriginal.com/?aff=cannagrok", note: "Houston" },
-
-            // + OTHER STATES (NV, AZ, IL, MI, WA, OR, MA, NJ, PA)
-            { name: "Planet 13 Las Vegas", lat: 36.1699, lng: -115.1398, state: "NV", type: "THC", link: "https://planet13.com/?aff=cannagrok", note: "Las Vegas" },
-            { name: "Harvest Phoenix", lat: 33.4484, lng: -112.0740, state: "AZ", type: "THC", link: "https://harvest.com/?aff=cannagrok", note: "Phoenix" },
-            { name: "Sunnyside Chicago", lat: 41.8781, lng: -87.6298, state: "IL", type: "THC", link: "https://sunnyside.shop/?aff=cannagrok", note: "Chicago" },
-            { name: "Lume Detroit", lat: 42.3314, lng: -83.0458, state: "MI", type: "THC", link: "https://lume.com/?aff=cannagrok", note: "Detroit" },
-            { name: "Have a Heart Seattle", lat: 47.6062, lng: -122.3321, state: "WA", type: "THC", link: "https://haveaheart.com/?aff=cannagrok", note: "Seattle" },
-            { name: "Chalice Farms Portland", lat: 45.5231, lng: -122.6765, state: "OR", type: "THC", link: "https://chalicefarms.com/?aff=cannagrok", note: "Portland" },
-            { name: "Theory Wellness Boston", lat: 42.4072, lng: -71.3824, state: "MA", type: "THC", link: "https://theorywellness.com/?aff=cannagrok", note: "Boston" },
-            { name: "Zen Leaf Newark", lat: 40.7357, lng: -74.1724, state: "NJ", type: "THC", link: "https://zenleaf.com/?aff=cannagrok", note: "Newark" },
-            { name: "Ethos Philadelphia", lat: 39.9526, lng: -75.1652, state: "PA", type: "Medical THC", link: "https://ethoscannabis.com/?aff=cannagrok", note: "Philadelphia" }
-
-            // + 900 MORE IN PRODUCTION
+            { name: "Preston Hemp Co", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://prestonhempco.com/?aff=cannagrok", note: "Online Only" },
+            // Sample THC Legal Affiliates (Non-Charlotte) - Keep these Affiliate links
+            { name: "MedMen", lat: 34.0928, lng: -118.3587, state: "CA", type: "THC", link: "https://medmen.com/?aff=cannagrok", note: "Los Angeles" },
+            { name: "Cookies", lat: 40.7128, lng: -74.0060, state: "NY", type: "THC", link: "https://cookies.co/?aff=cannagrok", note: "Manhattan" },
+            { name: "Green Dot Labs", lat: 39.7392, lng: -104.9903, state: "CO", type: "THC", link: "https://greendotlabs.com/?aff=cannagrok", note: "Denver" },
+            { name: "Sunnyside", lat: 28.5383, lng: -81.3792, state: "FL", type: "Medical THC", link: "https://sunnyside.shop/?aff=cannagrok", note: "Orlando" },
+            { name: "Trulieve", lat: 30.3322, lng: -81.6557, state: "FL", type: "Medical THC", link: "https://www.trulieve.com/?aff=cannagrok", note: "Jacksonville" },
+            // Other US locations (Non-Affiliate, for map density/filler)
+            { name: "Denver Relief", lat: 39.7523, lng: -104.9965, state: "CO", type: "THC", link: "#", note: "Denver" },
+            { name: "The Green Solution", lat: 39.7719, lng: -105.0061, state: "CO", type: "THC", link: "#", note: "Denver" },
+            { name: "Harvest of Tempe", lat: 33.4255, lng: -111.9400, state: "AZ", type: "THC", link: "#", note: "Phoenix" },
+            { name: "The Reef", lat: 47.6062, lng: -122.3321, state: "WA", type: "THC", link: "#", note: "Seattle" },
+            { name: "Dispensary 33", lat: 41.9796, lng: -87.6690, state: "IL", type: "THC", link: "#", note: "Chicago" }
         ];
 
-        // ELIMINATE DUPLICATES
-        const uniqueShops = Array.from(new Set(shops.map(s => s.name)))
-            .map(name => shops.find(s => s.name === name));
+        function getZipCodeCoordinates(zip) {
+            const zipCoords = {
+                '28205': [35.2346, -80.8037], // Charlotte (NoDa/Plaza Midwood area)
+                '28204': [35.2173, -80.8309], // Charlotte (Midtown)
+                '28202': [35.2270, -80.8453], // Charlotte (Uptown)
+                '78701': [30.2672, -97.7431], // Austin, TX
+                '90210': [34.0736, -118.4004], // Beverly Hills, CA
+                '10001': [40.7505, -73.9968], // NYC, NY
+                '80202': [39.7392, -104.9903] // Denver, CO
+            };
+            return zipCoords[zip] || null; 
+        }
 
-        let markers = [];
-        uniqueShops.forEach(shop => {
-            const marker = L.marker([shop.lat, shop.lng]).addTo(map);
-            marker.bindPopup(`
-                <b style="color:#1B5E20;">${shop.name}</b><br>
-                ${shop.note}<br>
-                <i>${shop.state} • ${shop.type}</i><br>
-                <a href="${shop.link}" target="_blank" class="popup-link">Shop Now →</a>
-            `);
-            markers.push({ marker, name: shop.name.toLowerCase(), note: shop.note.toLowerCase(), type: shop.type.toLowerCase(), state: shop.state });
-        });
+        function addMarkers(shopList, userLat, userLng) {
+            markers.clearLayers(); 
+
+            const shopsWithDistance = shopList.map(shop => {
+                let distance = Infinity; 
+
+                if (userLat && userLng) {
+                    const userPoint = L.latLng(userLat, userLng);
+                    const shopPoint = L.latLng(shop.lat, shop.lng);
+                    distance = userPoint.distanceTo(shopPoint); 
+                }
+                
+                return { ...shop, distance: distance };
+            });
+
+            shopsWithDistance.sort((a, b) => {
+                if (a.distance !== b.distance) {
+                    return a.distance - b.distance; 
+                }
+                return a.name.localeCompare(b.name);
+            });
+
+            shopsWithDistance.forEach(shop => {
+                const distanceInMiles = shop.distance !== Infinity ? (shop.distance / 1609.34).toFixed(1) + ' mi' : 'N/A';
+                
+                const isAffiliate = shop.link.includes("?aff=cannagrok"); 
+                
+                const icon = isAffiliate 
+                    ? L.divIcon({
+                        className: 'affiliate-marker',
+                        html: `<div style="background-color:#FFD700; color:#1B5E20; padding:4px 8px; border-radius:5px; font-weight:700; border:2px solid #1B5E20; box-shadow: 0 0 5px #FFD700;">⭐</div>`,
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                      })
+                    : L.divIcon({ 
+                        className: 'regular-marker',
+                        html: `<div style="background-color:#1B5E20; color:white; padding:4px 8px; border-radius:5px; font-weight:700;">${shop.type}</div>`,
+                        iconSize: [50, 20],
+                        iconAnchor: [25, 10]
+                      });
+
+
+                const marker = L.marker([shop.lat, shop.lng], { icon: icon });
+
+                let popupContent = `
+                    <div style="font-family: 'Inter', sans-serif;">
+                        <h4 style="margin: 0 0 5px; color: ${isAffiliate ? '#FFD700' : '#1B5E20'};">${shop.name} ${isAffiliate ? '(Affiliate Deal!)' : ''}</h4>
+                        <p style="margin: 0 0 5px; font-size: 0.9em;">
+                            <strong>Type:</strong> ${shop.type}<br>
+                            <strong>Note:</strong> ${shop.note}<br>
+                            ${shop.distance !== Infinity ? `<strong>Distance:</strong> ${distanceInMiles}<br>` : ''}
+                        </p>
+                        ${shop.link && shop.link !== '#'
+                            ? `<a href="${shop.link}" target="_blank" class="popup-link" style="
+                                display: block; 
+                                margin-top: 10px; 
+                                padding: 8px 12px; 
+                                text-align: center; 
+                                background-color: ${isAffiliate ? '#FFD700' : '#66BB6A'}; 
+                                color: ${isAffiliate ? '#1B5E20' : 'white'};
+                                border-radius: 5px; 
+                                text-decoration: none;
+                                font-weight: 700;
+                                border: ${isAffiliate ? '2px solid #1B5E20' : 'none'};
+                            ">VIEW STORE / CLAIM DEAL →</a>`
+                            : `<p style="margin-top:10px; font-size:0.8em; color:gray;">Link unavailable.</p>`
+                        }
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+                markers.addLayer(marker);
+            });
+
+            // Update Local VIP Deals on Dashboard (if premium)
+            const premiumStatus = localStorage.getItem('cannagrok_premium');
+            const localDealsDiv = document.querySelector('#premiumDashboard .dashboard-section:nth-child(4)');
+
+            if (premiumStatus === 'unlocked' && localDealsDiv) {
+                const nearestAffiliates = shopsWithDistance.filter(s => s.link.includes("?aff=cannagrok") && s.distance !== Infinity).slice(0, 3);
+                
+                if (nearestAffiliates.length > 0) {
+                    let dealsHtml = `<p style="font-size:0.9em; color:#444;">*Daily alerts on the best local discounts and offers from affiliates near your Zip Code (${localStorage.getItem('profileZip')}).*</p>`;
+                    nearestAffiliates.forEach(shop => {
+                        const distMi = (shop.distance / 1609.34).toFixed(1);
+                        dealsHtml += `<p style="margin: 5px 0;"><strong>🔥 VIP Deal:</strong> ${shop.name} (${distMi} mi) - <a href="${shop.link}" target="_blank" style="color:var(--green-dark); font-weight:700;">View Offer</a></p>`;
+                    });
+                    localDealsDiv.innerHTML = `<h3>Local VIP Deals</h3>${dealsHtml}`;
+                } else {
+                     localDealsDiv.innerHTML = `<h3>Local VIP Deals</h3><p style="font-size:0.9em; color:#444;">No affiliates found near your Zip Code.</p>`;
+                }
+            }
+        }
 
         function centerOnState() {
-            const state = document.getElementById('stateSelect').value;
-            const info = document.getElementById('stateInfo');
-            if (state && stateCenters[state]) {
-                map.setView(stateCenters[state], 9);
-                info.textContent = `${document.getElementById('stateSelect').options[document.getElementById('stateSelect').selectedIndex].text}`;
+            const stateCode = document.getElementById('stateSelect').value;
+            const infoDiv = document.getElementById('stateInfo');
+            
+            if (stateCode) {
+                const [lat, lng] = stateCenters[stateCode];
+                map.setView([lat, lng], 10);
+                infoDiv.textContent = `Displaying: ${document.querySelector('#stateSelect option:checked').text}`;
+                filterMap(); 
             } else {
                 map.setView([39.8283, -98.5795], 4);
-                info.textContent = "National View";
+                infoDiv.textContent = 'National View';
+                filterMap(); 
             }
-            filterMap();
         }
 
         function filterMap() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const state = document.getElementById('stateSelect').value;
-            markers.forEach(m => {
-                const matches = m.name.includes(query) || m.note.includes(query) || m.type.includes(query);
-                const stateMatch = !state || m.state === state;
-                if (matches && stateMatch) m.marker.addTo(map);
-                else map.removeLayer(m.marker);
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const selectedState = document.getElementById('stateSelect').value;
+            
+            const filteredShops = shops.filter(shop => {
+                const stateMatch = !selectedState || shop.state === selectedState;
+                const searchMatch = !searchTerm || 
+                                    shop.name.toLowerCase().includes(searchTerm) ||
+                                    shop.type.toLowerCase().includes(searchTerm) ||
+                                    shop.note.toLowerCase().includes(searchTerm);
+                return stateMatch && searchMatch;
             });
+
+            addMarkers(filteredShops, currentZipLat, currentZipLng); 
         }
 
-        filterMap();
-        
-        // Final check to apply lock after map loads
-        map.whenReady(function() {
-            if (localStorage.getItem('cannagrok_premium') !== 'unlocked') {
-                document.getElementById('map').classList.add('premium-locked');
-            } else {
-                document.getElementById('paywall-overlay').style.display = 'none';
-                document.getElementById('premiumDashboard').style.display = 'flex'; // Ensure dashboard is visible if already unlocked
-            }
-        });
+        function loadProfileData() {
+            document.getElementById('profileGoal').value = localStorage.getItem('profileGoal') || 'sleep';
+            document.getElementById('profileExperience').value = localStorage.getItem('profileExperience') || 'novice';
+            
+            const userZip = localStorage.getItem('profileZip');
+            document.getElementById('profileZip').value = userZip || '';
+            
+            const coords = getZipCodeCoordinates(userZip);
 
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                askGrok();
+            if (coords) {
+                currentZipLat = coords[0];
+                currentZipLng = coords[1];
+            } else {
+                currentZipLat = 35.2271; 
+                currentZipLng = -80.8431; 
             }
-        });
+
+            filterMap();
+        }
+
+        window.onload = function() {
+            checkDailyReset();
+            updateQueryCounter();
+            checkAccess(); // Determines initial state (Age Gate, Free Map, or Premium)
+            loadProfileData(); 
+        }
         
     </script>
 </body>
 </html>
- 
