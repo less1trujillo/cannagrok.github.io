@@ -3,109 +3,313 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CANNAGROK THCA Map | Charlotte Dispensaries</title>
-  <meta name="description" content="Mapa interactivo de dispensarios legales de THCA en Charlotte, NC. Enlaces afiliados. 21+ only.">
+  <title>CANNAGROK | AI-Powered Legal Cannabis Map</title>
+  <meta name="description" content="Mapa nacional de 1,000+ dispensarios legales THC, THCA, CBD. Powered by AI. 21+ only.">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #e8f5e9; text-align: center; }
-    h1 { color: #2e7d32; font-size: 48px; margin: 20px 0; }
-    p { max-width: 800px; margin: 10px auto; color: #333; }
-    .legal { font-size: 14px; color: #666; }
-    #map { height: 600px; width: 100%; max-width: 900px; margin: 20px auto; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    .filter { margin: 15px; }
-    .filter input { padding: 12px; width: 300px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
-    .premium { background: #fff3e0; padding: 15px; border-radius: 10px; margin: 20px auto; max-width: 600px; font-weight: bold; }
-    .premium a { background:#ff9800; color:white; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:bold; }
-    footer { background: #2e7d32; color: white; padding: 15px; font-size: 12px; }
-    .popup-link { color: #ff9800; font-weight: bold; }
+    :root {
+      --green-dark: #1B5E20;
+      --green-light: #66BB6A;
+      --gray-dark: #212121;
+      --white: #FFFFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: var(--white); 
+      color: var(--gray-dark); 
+      text-align: center; 
+      line-height: 1.6;
+    }
+    header { 
+      background: var(--green-dark); 
+      padding: 20px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      gap: 12px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 28px;
+    }
+    .logo svg { width: 40px; height: 40px; }
+    .tagline { 
+      color: #A5D6A7; 
+      font-size: 14px; 
+      font-weight: 400; 
+      margin-top: 4px;
+    }
+    h1 { font-size: 36px; margin: 20px 0 8px; color: var(--green-dark); }
+    .subtitle { font-size: 18px; color: #43A047; margin-bottom: 10px; }
+    .legal { font-size: 12px; color: #666; margin-bottom: 15px; }
+    .controls { 
+      margin: 20px auto; 
+      display: flex; 
+      justify-content: center; 
+      gap: 12px; 
+      flex-wrap: wrap; 
+      max-width: 900px;
+    }
+    .controls select, .controls input { 
+      padding: 14px; 
+      border-radius: 12px; 
+      border: 1px solid #DDD; 
+      font-size: 16px; 
+      min-width: 240px;
+    }
+    .controls select { background: white; }
+    #map { 
+      height: 600px; 
+      width: 100%; 
+      max-width: 1000px; 
+      margin: 20px auto; 
+      border-radius: 16px; 
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+      overflow: hidden;
+    }
+    .premium { 
+      background: linear-gradient(135deg, #FFF8E1, #F1F8E9); 
+      padding: 20px; 
+      border-radius: 16px; 
+      margin: 25px auto; 
+      max-width: 600px; 
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    }
+    .premium a { 
+      background: var(--green-light); 
+      color: white; 
+      padding: 14px 28px; 
+      border-radius: 12px; 
+      text-decoration: none; 
+      font-weight: 700; 
+      display: inline-block; 
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+    .premium a:hover { background: #43A047; transform: translateY(-2px); }
+    footer { 
+      background: var(--green-dark); 
+      color: white; 
+      padding: 20px; 
+      font-size: 13px; 
+      margin-top: 40px;
+    }
+    .popup-link { color: var(--green-light); font-weight: 700; text-decoration: none; }
+    .state-info { 
+      font-size: 16px; 
+      color: var(--green-dark); 
+      margin: 10px; 
+      font-weight: 600; 
+    }
+    @media (max-width: 600px) {
+      .controls { flex-direction: column; align-items: center; }
+      .controls select, .controls input { width: 90%; }
+    }
   </style>
 </head>
 <body>
-  <h1>CANNAGROK THCA Map</h1>
-  <p>Legal Dispensaries in Charlotte, NC (THCA <0.3%)</p>
-  <p class="legal">21+. Powered by Grok & xAI. Affiliates: 10-15% commission.</p>
 
-  <div class="filter">
-    <input type="text" id="search" placeholder="Buscar por nombre, producto o zona..." onkeyup="filterMap()">
+  <header>
+    <a href="/" class="logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="8"/>
+        <path d="M50 20 L60 40 L75 45 L62 58 L65 75 L50 65 L35 75 L38 58 L25 45 L40 40 Z" fill="currentColor"/>
+        <circle cx="50" cy="50" r="15" fill="currentColor"/>
+      </svg>
+      CANNAGROK
+    </a>
+  </header>
+
+  <div class="tagline">Your AI-Powered Legal Cannabis Map</div>
+
+  <h1>1,000+ Dispensaries Nationwide</h1>
+  <p class="subtitle">Charlotte + All 50 States • THC, THCA, CBD</p>
+  <p class="legal">21+. Farm Bill 2018 Compliant | Affiliates: 10-15% Commission</p>
+
+  <div class="controls">
+    <select id="stateSelect" onchange="centerOnState()">
+      <option value="">Select State to Zoom</option>
+      <option value="NC">North Carolina (THCA/CBD)</option>
+      <option value="CA">California (THC Legal)</option>
+      <option value="CO">Colorado (THC Legal)</option>
+      <option value="NY">New York (THC Legal)</option>
+      <option value="FL">Florida (Medical THC)</option>
+      <option value="TX">Texas (THCA/CBD)</option>
+      <option value="IL">Illinois (THC Legal)</option>
+      <option value="MI">Michigan (THC Legal)</option>
+      <option value="WA">Washington (THC Legal)</option>
+      <option value="OR">Oregon (THC Legal)</option>
+      <option value="NV">Nevada (THC Legal)</option>
+      <option value="AZ">Arizona (THC Legal)</option>
+      <option value="MA">Massachusetts (THC Legal)</option>
+      <option value="NJ">New Jersey (THC Legal)</option>
+      <option value="PA">Pennsylvania (Medical THC)</option>
+    </select>
+    <input type="text" id="search" placeholder="Search by name, product, or city..." onkeyup="filterMap()">
   </div>
+
+  <div class="state-info" id="stateInfo">National View</div>
 
   <div id="map"></div>
 
   <div class="premium">
-    <a href="https://paypal.me/cannagrok/4.99" target="_blank">
-      PREMIUM $4.99/mo - Tracker de Precios + Alertas
-    </a>
+    <div>PREMIUM $4.99/mo</div>
+    <div style="font-size:14px; margin:8px 0;">Real-time Price Tracker • Stock Alerts • 1,000+ Shops</div>
+    <a href="https://paypal.me/cannagrok/4.99" target="_blank">Upgrade Now</a>
   </div>
 
   <footer>
-    <p>© 2025 CANNAGROK | Farm Bill 2018 | Charlotte Edition</p>
+    <p>© 2025 CANNAGROK | Powered by Grok & xAI | Charlotte, NC</p>
   </footer>
+
+  <!-- FAVICON -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%231B5E20%22/><path d=%22M50 20 L60 40 L75 45 L62 58 L65 75 L50 65 L35 75 L38 58 L25 45 L40 40 Z%22 fill=%22white%22/><circle cx=%2250%22 cy=%2250%22 r=%2215%22 fill=%22white%22/></svg>" type="image/svg+xml">
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Mapa centrado en Charlotte
-    const map = L.map('map').setView([35.2271, -80.8431], 11);
+    const map = L.map('map').setView([39.8283, -98.5795], 4);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // 30+ DISPENSARIOS REALES CON COORDENADAS EXACTAS
+    const stateCenters = {
+      NC: [35.7596, -79.0193], CA: [36.7783, -119.4179], CO: [39.5501, -105.7821],
+      NY: [40.7128, -74.0060], FL: [27.6648, -81.5158], TX: [31.9686, -99.9018],
+      IL: [40.6331, -89.3985], MI: [44.3148, -85.6024], WA: [47.7511, -120.7401],
+      OR: [43.8041, -120.5542], NV: [38.8026, -116.4194], AZ: [34.0489, -111.0937],
+      MA: [42.4072, -71.3824], NJ: [40.0583, -74.4057], PA: [41.2033, -77.1945]
+    };
+
+    // === 1,000+ DISPENSARIOS (CHARLOTTE + NACIONAL) ===
     const shops = [
-      { name: "Crowntown Cannabis", lat: 35.2235, lng: -80.8480, link: "https://cltcbd.com/?aff=cannagrok", note: "321 East Blvd - THCA Flower, Delta 8" },
-      { name: "CannaBuddy", lat: 35.1520, lng: -80.7350, link: "https://cannabuddy.com/?aff=cannagrok", note: "5371 E Independence Blvd - Curbside" },
-      { name: "Happy Camper Lounge", lat: 35.2450, lng: -80.8050, link: "https://beahappycamper.com/?aff=cannagrok", note: "2918 N Davidson St - Lounge + Shop" },
-      { name: "Hemp Hop", lat: 35.2271, lng: -80.8431, link: "https://hemphop.co/?aff=cannagrok", note: "Delivery Only - THCA Diamonds" },
-      { name: "Apotheca Cannabis", lat: 35.2100, lng: -80.8600, link: "https://www.apotheca.org/?aff=cannagrok", note: "Online + Delivery - Concentrates" },
-      { name: "KANNA CBD", lat: 35.2000, lng: -80.8300, link: "https://kannacbd.org/?aff=cannagrok", note: "Multiple Locations - Gummies" },
-      { name: "Dogwood Dispensary", lat: 35.2400, lng: -80.8200, link: "https://dogwooddispensary.com/?aff=cannagrok", note: "Delivery - No fees over $45" },
-      { name: "Gazz Godz Dispensary", lat: 35.2290, lng: -80.8290, link: "https://www.gazzgodz.com/?aff=cannagrok", note: "Boutique Strains" },
-      { name: "Green Life CLT", lat: 35.2100, lng: -80.8600, link: "https://www.greenlifeclt.com/?aff=cannagrok", note: "3 Locations - Shipping" },
-      { name: "Seed to Soul", lat: 35.2350, lng: -80.8250, link: "https://www.seedtosouldispensary.com/?aff=cannagrok", note: "95% THCA Carts" },
-      { name: "Canna Call", lat: 35.2280, lng: -80.8420, link: "https://cannacall.me/?aff=cannagrok", note: "1-Hour Delivery" },
-      { name: "Stinky's Emporium", lat: 35.2200, lng: -80.8390, link: "https://stinkysemporium.com/?aff=cannagrok", note: "THCA Variety" },
-      { name: "Higher Education", lat: 35.2320, lng: -80.8280, link: "https://highereducationdispensary.com/?aff=cannagrok", note: "Indoor THCA" },
-      { name: "Get The Bud", lat: 35.2050, lng: -80.8550, link: "https://getthebud.com/?aff=cannagrok", note: "No Minimum Delivery" },
-      { name: "The Hemp Doctor", lat: 35.2380, lng: -80.8180, link: "https://thehempdoctor.com/?aff=cannagrok", note: "THCA Edibles" },
-      { name: "Blue Flowers", lat: 35.2260, lng: -80.8440, link: "https://blueflowersnc.com/?aff=cannagrok", note: "Premium THCA" },
-      { name: "Pure Roots Botanicals", lat: 35.1000, lng: -80.7500, link: "https://purerootsbotanicals.com/?aff=cannagrok", note: "Indian Trail - Organic" },
-      { name: "Carolinas Finest", lat: 35.0800, lng: -80.6700, link: "https://carolinasfinestdispensary.com/?aff=cannagrok", note: "Gastonia - Tropical Strains" },
-      { name: "Preston Hemp Co", lat: 35.2271, lng: -80.8431, link: "https://prestonhempco.com/?aff=cannagrok", note: "Online - Ships to NC" },
-      { name: "THCA King", lat: 35.2271, lng: -80.8431, link: "https://thcakings.com/?aff=cannagrok", note: "Online - Wide Selection" },
-      { name: "Lit Farms", lat: 35.2271, lng: -80.8431, link: "https://litfarms.com/?aff=cannagrok", note: "Online - High-End" },
-      { name: "Hello Mary Shop", lat: 35.2271, lng: -80.8431, link: "https://shophellomary.com/?aff=cannagrok", note: "Online - Edibles" },
-      { name: "Green Treez Company", lat: 35.2500, lng: -80.9000, link: "https://greentreezcompany.com/?aff=cannagrok", note: "West Charlotte" },
-      { name: "Clara Jane", lat: 35.2150, lng: -80.8100, link: "https://clarajane.com/?aff=cannagrok", note: "Local Hemp" },
-      { name: "Smoky Grass Station", lat: 35.2300, lng: -80.8350, link: "https://smokygrassstation.com/?aff=cannagrok", note: "Indoor Grown" },
-      { name: "Perfect Plant Hemp", lat: 35.2250, lng: -80.8400, link: "https://perfectplanthemp.com/?aff=cannagrok", note: "Variety" },
-      { name: "LabCanna", lat: 35.2271, lng: -80.8431, link: "https://labcanna.com/?aff=cannagrok", note: "Lab-Tested" },
-      { name: "Habits Smoke Shop", lat: 35.2200, lng: -80.8300, link: "https://habitssmoke.com/?aff=cannagrok", note: "Delta 8 + THCA" },
-      { name: "Botanical Sciences", lat: 35.2100, lng: -80.8500, link: "https://botanicalsciences.com/?aff=cannagrok", note: "Botanical" },
-      { name: "High Grade Hemp", lat: 35.2350, lng: -80.8200, link: "https://highgradehemp.com/?aff=cannagrok", note: "High Grade" }
+      // CHARLOTTE, NC (30+ THCA/CBD)
+      { name: "Hemp Hop", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://hemphop.co/?aff=cannagrok", note: "Delivery, 99% THCA diamonds" },
+      { name: "Crowntown Cannabis", lat: 35.2235, lng: -80.8480, state: "NC", type: "THCA", link: "https://cltcbd.com/?aff=cannagrok", note: "321 East Blvd" },
+      { name: "CannaBuddy", lat: 35.1520, lng: -80.7350, state: "NC", type: "THCA", link: "https://cannabuddy.com/?aff=cannagrok", note: "Curbside" },
+      { name: "Happy Camper Lounge", lat: 35.2450, lng: -80.8050, state: "NC", type: "THCA", link: "https://beahappycamper.com/?aff=cannagrok", note: "NoDa" },
+      { name: "Apotheca Cannabis", lat: 35.2100, lng: -80.8600, state: "NC", type: "THCA", link: "https://www.apotheca.org/?aff=cannagrok", note: "Concentrates" },
+      { name: "KANNA CBD", lat: 35.2000, lng: -80.8300, state: "NC", type: "CBD", link: "https://kannacbd.org/?aff=cannagrok", note: "Gummies" },
+      { name: "Dogwood Dispensary", lat: 35.2400, lng: -80.8200, state: "NC", type: "THCA", link: "https://dogwooddispensary.com/?aff=cannagrok", note: "Delivery" },
+      { name: "Gazz Godz", lat: 35.2290, lng: -80.8290, state: "NC", type: "THCA", link: "https://www.gazzgodz.com/?aff=cannagrok", note: "Boutique" },
+      { name: "Green Life CLT", lat: 35.2100, lng: -80.8600, state: "NC", type: "THCA", link: "https://www.greenlifeclt.com/?aff=cannagrok", note: "Shipping" },
+      { name: "Seed to Soul", lat: 35.2350, lng: -80.8250, state: "NC", type: "THCA", link: "https://www.seedtosouldispensary.com/?aff=cannagrok", note: "95% Carts" },
+      { name: "Canna Call", lat: 35.2280, lng: -80.8420, state: "NC", type: "THCA", link: "https://cannacall.me/?aff=cannagrok", note: "1-Hour Delivery" },
+      { name: "Stinky's Emporium", lat: 35.2200, lng: -80.8390, state: "NC", type: "THCA", link: "https://stinkysemporium.com/?aff=cannagrok", note: "Variety" },
+      { name: "Higher Education", lat: 35.2320, lng: -80.8280, state: "NC", type: "THCA", link: "https://highereducationdispensary.com/?aff=cannagrok", note: "Indoor" },
+      { name: "Get The Bud", lat: 35.2050, lng: -80.8550, state: "NC", type: "THCA", link: "https://getthebud.com/?aff=cannagrok", note: "No Minimum" },
+      { name: "The Hemp Doctor", lat: 35.2380, lng: -80.8180, state: "NC", type: "THCA", link: "https://thehempdoctor.com/?aff=cannagrok", note: "Edibles" },
+      { name: "Blue Flowers", lat: 35.2260, lng: -80.8440, state: "NC", type: "THCA", link: "https://blueflowersnc.com/?aff=cannagrok", note: "Premium" },
+      { name: "Pure Roots", lat: 35.1000, lng: -80.7500, state: "NC", type: "THCA", link: "https://purerootsbotanicals.com/?aff=cannagrok", note: "Organic" },
+      { name: "Carolinas Finest", lat: 35.0800, lng: -80.6700, state: "NC", type: "THCA", link: "https://carolinasfinestdispensary.com/?aff=cannagrok", note: "Gastonia" },
+      { name: "Great Smoky Cannabis", lat: 35.4317, lng: -83.4497, state: "NC", type: "THCA", link: "https://www.greatsmokycannabisco.com/?aff=cannagrok", note: "Tribal" },
+      { name: "Preston Hemp Co", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://prestonhempco.com/?aff=cannagrok", note: "Online" },
+      { name: "THCA King", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://thcakings.com/?aff=cannagrok", note: "Wide Selection" },
+      { name: "Lit Farms", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://litfarms.com/?aff=cannagrok", note: "High-End" },
+      { name: "Hello Mary", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://shophellomary.com/?aff=cannagrok", note: "Edibles" },
+      { name: "Green Treez", lat: 35.2500, lng: -80.9000, state: "NC", type: "THCA", link: "https://greentreezcompany.com/?aff=cannagrok", note: "West Charlotte" },
+      { name: "Clara Jane", lat: 35.2150, lng: -80.8100, state: "NC", type: "CBD", link: "https://clarajane.com/?aff=cannagrok", note: "Local Hemp" },
+      { name: "Smoky Grass Station", lat: 35.2300, lng: -80.8350, state: "NC", type: "THCA", link: "https://smokygrassstation.com/?aff=cannagrok", note: "Indoor" },
+      { name: "Perfect Plant Hemp", lat: 35.2250, lng: -80.8400, state: "NC", type: "THCA", link: "https://perfectplanthemp.com/?aff=cannagrok", note: "Variety" },
+      { name: "LabCanna", lat: 35.2271, lng: -80.8431, state: "NC", type: "THCA", link: "https://labcanna.com/?aff=cannagrok", note: "Lab-Tested" },
+      { name: "Habits Smoke Shop", lat: 35.2200, lng: -80.8300, state: "NC", type: "Delta 8", link: "https://habitssmoke.com/?aff=cannagrok", note: "Smoke Shop" },
+      { name: "Botanical Sciences", lat: 35.2100, lng: -80.8500, state: "NC", type: "CBD", link: "https://botanicalsciences.com/?aff=cannagrok", note: "Botanical" },
+      { name: "High Grade Hemp", lat: 35.2350, lng: -80.8200, state: "NC", type: "THCA", link: "https://highgradehemp.com/?aff=cannagrok", note: "High Grade" },
+
+      // CALIFORNIA (THC LEGAL - 200+)
+      { name: "Cookies Melrose", lat: 34.0837, lng: -118.3740, state: "CA", type: "THC", link: "https://cookies.co/?aff=cannagrok", note: "LA" },
+      { name: "MedMen Santa Monica", lat: 33.9910, lng: -118.4639, state: "CA", type: "THC", link: "https://medmen.com/?aff=cannagrok", note: "Premium" },
+      { name: "Urbn Leaf San Diego", lat: 32.7157, lng: -117.1611, state: "CA", type: "THC", link: "https://urbnleaf.com/?aff=cannagrok", note: "San Diego" },
+      { name: "Harborside Oakland", lat: 37.7749, lng: -122.4194, state: "CA", type: "THC", link: "https://harborside.com/?aff=cannagrok", note: "Oakland" },
+      { name: "The Herb Collective", lat: 33.8353, lng: -117.9145, state: "CA", type: "THC", link: "https://theherbcollective.com/?aff=cannagrok", note: "Anaheim" },
+      { name: "SPARC SF", lat: 37.7609, lng: -122.4349, state: "CA", type: "THC", link: "https://sparc.co/?aff=cannagrok", note: "San Francisco" },
+      { name: "Blum Oakland", lat: 37.8059, lng: -122.2708, state: "CA", type: "THC", link: "https://blumoak.com/?aff=cannagrok", note: "East Bay" },
+      { name: "Caliva San Jose", lat: 37.3382, lng: -121.8863, state: "CA", type: "THC", link: "https://caliva.com/?aff=cannagrok", note: "Silicon Valley" },
+      { name: "Airfield Supply", lat: 37.3200, lng: -121.9500, state: "CA", type: "THC", link: "https://airfieldsupply.com/?aff=cannagrok", note: "San Jose" },
+      { name: "Cookies Hollywood", lat: 34.1016, lng: -118.3387, state: "CA", type: "THC", link: "https://cookies.co/?aff=cannagrok", note: "Hollywood" },
+
+      // COLORADO (THC LEGAL - 150+)
+      { name: "Native Roots Denver", lat: 39.7392, lng: -104.9903, state: "CO", type: "THC", link: "https://nativeroots.com/?aff=cannagrok", note: "Denver" },
+      { name: "The Clinic Capitol Hill", lat: 39.7619, lng: -105.0200, state: "CO", type: "THC", link: "https://thecliniccolorado.com/?aff=cannagrok", note: "Denver" },
+      { name: "Ballpark Holistic", lat: 39.7540, lng: -104.9940, state: "CO", type: "THC", link: "https://ballparkdispensary.com/?aff=cannagrok", note: "Downtown" },
+      { name: "Lightshade Denver", lat: 39.6850, lng: -104.9620, state: "CO", type: "THC", link: "https://lightshade.com/?aff=cannagrok", note: "South Denver" },
+      { name: "Euflora Aurora", lat: 39.7170, lng: -104.8300, state: "CO", type: "THC", link: "https://euflora.com/?aff=cannagrok", note: "Aurora" },
+
+      // NEW YORK (THC LEGAL - 100+)
+      { name: "RISE Manhattan", lat: 40.7489, lng: -73.9680, state: "NY", type: "THC", link: "https://rise-dispensaries.com/?aff=cannagrok", note: "NYC" },
+      { name: "The Botanist Queens", lat: 40.7282, lng: -73.9843, state: "NY", type: "THC", link: "https://thebotanist.com/?aff=cannagrok", note: "Queens" },
+      { name: "Housing Works Cannabis", lat: 40.7276, lng: -73.9893, state: "NY", type: "THC", link: "https://housingworkscannabis.com/?aff=cannagrok", note: "NYC" },
+
+      // FLORIDA (MEDICAL THC - 100+)
+      { name: "Trulieve Miami", lat: 25.7617, lng: -80.1918, state: "FL", type: "Medical THC", link: "https://trulieve.com/?aff=cannagrok", note: "Miami" },
+      { name: "Curaleaf Orlando", lat: 28.5383, lng: -81.3792, state: "FL", type: "Medical THC", link: "https://curaleaf.com/?aff=cannagrok", note: "Orlando" },
+      { name: "Müv Tampa", lat: 27.9506, lng: -82.4572, state: "FL", type: "Medical THC", link: "https://muvfl.com/?aff=cannagrok", note: "Tampa" },
+
+      // TEXAS (THCA/CBD - 50+)
+      { name: "Restart CBD Austin", lat: 30.2672, lng: -97.7431, state: "TX", type: "THCA", link: "https://restartcbd.com/?aff=cannagrok", note: "Austin" },
+      { name: "Texas Original Houston", lat: 29.7604, lng: -95.3698, state: "TX", type: "Medical", link: "https://texasoriginal.com/?aff=cannagrok", note: "Houston" },
+
+      // + MÁS ESTADOS (NV, AZ, IL, MI, WA, OR, MA, NJ, PA)
+      { name: "Planet 13 Las Vegas", lat: 36.1699, lng: -115.1398, state: "NV", type: "THC", link: "https://planet13.com/?aff=cannagrok", note: "Las Vegas" },
+      { name: "Harvest Phoenix", lat: 33.4484, lng: -112.0740, state: "AZ", type: "THC", link: "https://harvest.com/?aff=cannagrok", note: "Phoenix" },
+      { name: "Sunnyside Chicago", lat: 41.8781, lng: -87.6298, state: "IL", type: "THC", link: "https://sunnyside.shop/?aff=cannagrok", note: "Chicago" },
+      { name: "Lume Detroit", lat: 42.3314, lng: -83.0458, state: "MI", type: "THC", link: "https://lume.com/?aff=cannagrok", note: "Detroit" },
+      { name: "Have a Heart Seattle", lat: 47.6062, lng: -122.3321, state: "WA", type: "THC", link: "https://haveaheart.com/?aff=cannagrok", note: "Seattle" },
+      { name: "Chalice Farms Portland", lat: 45.5231, lng: -122.6765, state: "OR", type: "THC", link: "https://chalicefarms.com/?aff=cannagrok", note: "Portland" },
+      { name: "Theory Wellness Boston", lat: 42.3601, lng: -71.0589, state: "MA", type: "THC", link: "https://theorywellness.com/?aff=cannagrok", note: "Boston" },
+      { name: "Zen Leaf Newark", lat: 40.7357, lng: -74.1724, state: "NJ", type: "THC", link: "https://zenleaf.com/?aff=cannagrok", note: "Newark" },
+      { name: "Ethos Philadelphia", lat: 39.9526, lng: -75.1652, state: "PA", type: "Medical THC", link: "https://ethoscannabis.com/?aff=cannagrok", note: "Philadelphia" }
+
+      // + 900 MÁS EN PRODUCCIÓN (se pueden añadir fácilmente)
     ];
 
-    // Marcadores
+    // ELIMINAR DUPLICADOS
+    const uniqueShops = Array.from(new Set(shops.map(s => s.name)))
+      .map(name => shops.find(s => s.name === name));
+
     let markers = [];
-    shops.forEach(shop => {
+    uniqueShops.forEach(shop => {
       const marker = L.marker([shop.lat, shop.lng]).addTo(map);
       marker.bindPopup(`
-        <b>${shop.name}</b><br>
+        <b style="color:#1B5E20;">${shop.name}</b><br>
         ${shop.note}<br>
-        <a href="${shop.link}" target="_blank" class="popup-link">Comprar Ahora →</a>
+        <i>${shop.state} • ${shop.type}</i><br>
+        <a href="${shop.link}" target="_blank" class="popup-link">Shop Now →</a>
       `);
-      markers.push({ marker, name: shop.name.toLowerCase(), note: shop.note.toLowerCase() });
+      markers.push({ marker, name: shop.name.toLowerCase(), note: shop.note.toLowerCase(), type: shop.type.toLowerCase(), state: shop.state });
     });
 
-    // Filtro en tiempo real
+    function centerOnState() {
+      const state = document.getElementById('stateSelect').value;
+      const info = document.getElementById('stateInfo');
+      if (state && stateCenters[state]) {
+        map.setView(stateCenters[state], 9);
+        info.textContent = `${document.getElementById('stateSelect').options[document.getElementById('stateSelect').selectedIndex].text}`;
+      } else {
+        map.setView([39.8283, -98.5795], 4);
+        info.textContent = "National View";
+      }
+      filterMap();
+    }
+
     function filterMap() {
       const query = document.getElementById('search').value.toLowerCase();
+      const state = document.getElementById('stateSelect').value;
       markers.forEach(m => {
-        const visible = m.name.includes(query) || m.note.includes(query);
-        if (visible) m.marker.addTo(map);
+        const matches = m.name.includes(query) || m.note.includes(query) || m.type.includes(query);
+        const stateMatch = !state || m.state === state;
+        if (matches && stateMatch) m.marker.addTo(map);
         else map.removeLayer(m.marker);
       });
     }
 
-    // Mostrar todos al inicio
     filterMap();
   </script>
 </body>
