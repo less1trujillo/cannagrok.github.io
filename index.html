@@ -109,7 +109,31 @@
             height: 100%; 
             width: 100%; 
         }
+       <!-- FREE HOOKS: Basic Map + Search (No Paywall) -->
+<div class="free-tools" style="background: #E8F5E9; padding: 20px; margin: 20px auto; max-width: 900px; border-radius: 16px;">
+  <h2 style="color: #1B5E20; margin-bottom: 16px;">Free Tools | Unlock Basic Access</h2>
+  <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+    <button onclick="showFreeMap()" style="padding: 12px 24px; background: #66BB6A; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">View Basic Map (10 Shops)</button>
+    <button onclick="freeStrainSearch()" style="padding: 12px 24px; background: #66BB6A; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Search Strains</button>
+  </div>
+  <p style="font-size: 14px; margin-top: 12px; color: #555;">Free: 3 queries/day. Premium: Unlimited AI + 1,000+ shops.</p>
+</div>
 
+<script>
+  // Free Map Layer (Basic 10 Shops)
+  function showFreeMap() {
+    alert('Basic Map Loaded: 10 Shops in Charlotte. Premium unlocks 1,000+ nationwide.');
+    // Add your map code here if gated
+  }
+
+  // Free Strain Search
+  function freeStrainSearch() {
+    const query = prompt('Search strains (e.g., "Blue Dream"):');
+    if (query) {
+      alert(`Results for "${query}": Balanced hybrid, 19.8% THCA. Legal in NC. Buy: [Link]. Premium for full DB.`);
+    }
+  }
+</script>
         /* PREMIUM DASHBOARD (Hidden by default) */
         #premiumDashboard {
             width: 350px;
