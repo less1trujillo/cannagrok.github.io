@@ -124,7 +124,14 @@
   // Free Map Layer (Basic 10 Shops)
   function showFreeMap() {
     alert('Basic Map Loaded: 10 Shops in Charlotte. Premium unlocks 1,000+ nationwide.');
-    // Add your map code here if gated
+    //function filterMap() {
+  const query = document.getElementById('search').value.toLowerCase();
+  markers.forEach(m => {
+    const visible = m.name.includes(query) || m.note.includes(query);
+    if (visible) m.marker.addTo(map);
+    else map.removeLayer(m.marker);
+  });
+}
   }
 
   // Free Strain Search
