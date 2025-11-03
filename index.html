@@ -913,5 +913,164 @@
         });
         
     </script>
+   <!-- ==================== CANNAGROK PRO UPGRADE (CHARLOTTE THCA FOCUS) ==================== -->
+<style>
+  :root { 
+    --green-dark: #1B5E20; --green-light: #66BB6A; --accent: #FF9800; 
+    --gray-dark: #212121; --white: #FFFFFF; --dark-bg: #121212; --dark-card: #1E1E1E; --dark-text: #E0E0E0; 
+  }
+  body.dark { background: var(--dark-bg); color: var(--dark-text); }
+  body.dark #map, body.dark .leaflet-container { background: #1a1a1a !important; }
+  body.dark .leaflet-popup-content-wrapper, body.dark .leaflet-popup-tip { background: var(--dark-card); color: var(--dark-text); }
+
+  /* HEADER */
+  .cg-header {
+    position: fixed; top: 0; left: 0; width: 100%; background: var(--green-dark); color: white; 
+    padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 1001;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .cg-logo { font-size: 22px; font-weight: 700; }
+  .dark-toggle { background: none; border: 1px solid white; color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 14px; }
+
+  /* SEARCH BAR */
+  .cg-search {
+    position: fixed; top: 60px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; z-index: 1000;
+  }
+  .cg-search input {
+    width: 100%; padding: 14px 50px 14px 16px; border: none; border-radius: 12px; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .cg-search button {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--green-light); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;
+  }
+
+  /* SIDEBAR */
+  .cg-sidebar {
+    position: fixed; left: -300px; top: 0; width: 280px; height: 100%; background: white; box-shadow: 2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1002; padding: 80px 16px 16px;
+  }
+  .cg-sidebar.open { left: 0; }
+  body.dark .cg-sidebar { background: var(--dark-card); }
+  .cg-sidebar h3 { color: var(--green-dark); margin-bottom: 16px; font-size: 18px; }
+  .filter-group { margin-bottom: 20px; }
+  .filter-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+  .filter-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 15px; }
+
+  /* TOGGLE BUTTON */
+  .sidebar-toggle {
+    position: fixed; left: 16px; top: 70px; z-index: 1003; background: var(--green-light); color: white; border: none; padding: 12px; border-radius: 50%; cursor: pointer; font-size: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  /* PREMIUM BANNER */
+  .cg-premium {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #FFF8E1, #FFF3E0); padding: 16px 24px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; max-width: 90%;
+  }
+  .cg-premium a { background: var(--accent); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; }
+
+  /* LEGAL CHECKER */
+  #legalChecker {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;
+  }
+  .checker-box {
+    background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  body.dark .checker-box { background: var(--dark-card); color: var(--dark-text); }
+  .checker-box h2 { color: var(--green-dark); margin-bottom: 16px; }
+  .checker-box input { width: 100%; padding: 14px; margin: 16px 0; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
+  .checker-box button { margin: 8px; padding: 12px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .btn-check { background: var(--green-light); color: white; }
+  .btn-close { background: var(--accent); color: white; }
+  #legalResult { margin-top: 20px; text-align: left; background: #f8fff8; padding: 16px; border-radius: 8px; font-size: 15px; }
+  body.dark #legalResult { background: #2a2a2a; }
+
+  @media (max-width: 768px) {
+    .cg-search { width: 95%; top: 55px; }
+    .cg-sidebar { width: 80%; }
+  }
+</style>
+
+<!-- HEADER -->
+<div class="cg-header">
+  <div class="cg-logo">CANNAGROK</div>
+  <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">Dark Mode</button>
+</div>
+<button class="sidebar-toggle" onclick="document.querySelector('.cg-sidebar').classList.toggle('open')">Filters</button>
+
+<!-- SEARCH -->
+<div class="cg-search">
+  <input type="text" id="cgSearch" placeholder="Charlotte THCA, CBD, Delta 8..." onkeyup="filterMap()">
+  <button>Search</button>
+</div>
+
+<!-- SIDEBAR -->
+<div class="cg-sidebar">
+  <h3>Charlotte Filters</h3>
+  <div class="filter-group">
+    <label>Neighborhood</label>
+    <select onchange="filterMap()">
+      <option value="">All Charlotte</option>
+      <option value="NoDa">NoDa</option>
+      <option value="South End">South End</option>
+      <option value="Plaza Midwood">Plaza Midwood</option>
+      <option value="Uptown">Uptown</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Product</label>
+    <select onchange="filterMap()">
+      <option value="">All Legal</option>
+      <option value="THCA">THCA Flower</option>
+      <option value="CBD">CBD Oil</option>
+      <option value="Delta 8">Delta 8</option>
+      <option value="Edibles">Edibles</option>
+    </select>
+  </div>
+</div>
+
+<!-- PREMIUM -->
+<div class="cg-premium">
+  <p>AI Strain Match + Legal Alerts</p>
+  <a href="https://paypal.me/cannagrok/4.99" target="_blank">Go Premium $4.99/mo</a>
+</div>
+
+<!-- LEGAL CHECKER -->
+<div id="legalChecker">
+  <div class="checker-box">
+    <h2>Legal Checker AI</h2>
+    <p>Enter state (e.g., NC)</p>
+    <input type="text" id="stateInput" placeholder="NC, CA, CO...">
+    <button class="btn-check" onclick="checkLegal()">Check</button>
+    <button class="btn-close" onclick="toggleLegalChecker()">Close</button>
+    <div id="legalResult"></div>
+  </div>
+</div>
+<button onclick="toggleLegalChecker()" style="position: fixed; right: 16px; bottom: 80px; background: var(--accent); color: white; border: none; padding: 14px; border-radius: 50%; font-size: 20px; z-index: 1003; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">Legal</button>
+
+<script>
+  function toggleLegalChecker() {
+    const modal = document.getElementById('legalChecker');
+    modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+  }
+
+  function checkLegal() {
+    const state = document.getElementById('stateInput').value.toUpperCase();
+    const result = document.getElementById('legalResult');
+    if (!state) { result.innerHTML = '<p style="color:#FF9800">Enter state (e.g., NC)</p>'; return; }
+
+    let msg = `<p><strong>${state}:</strong></p>`;
+    if (state === 'NC') {
+      msg += `<p>THCA: Legal<br>CBD: Legal<br>THC: Illegal (no rec)<br>Delta 8: Legal</p><p><strong>Charlotte:</strong> 100+ legal shops. Safe.</p>`;
+    } else if (['CA','CO','NY'].includes(state)) {
+      msg += `<p>All legal (21+). Premium for map.</p>`;
+    } else {
+      msg += `<p>THCA/CBD legal. THC: state rules. Premium for full.</p>`;
+    }
+    result.innerHTML = msg;
+  }
+
+  function filterMap() {
+    const query = document.getElementById('cgSearch').value.toLowerCase();
+    // Usa tu función original de filtro aquí
+  }
+</script>
+<!-- ==================== END CANNAGROK PRO UPGRADE ==================== --> 
 </body>
 </html>
