@@ -51,6 +51,7 @@
             margin-top: 4px;
             text-align: center;
         }
+        <button onclick="toggleLegalChecker()" style="background: #66BB6A; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; margin-left: 10px;">Legal Checker</button>
         h1 { font-size: 36px; margin: 20px 0 8px; color: var(--green-dark); text-align: center; }
         .subtitle { font-size: 18px; color: #43A047; margin-bottom: 10px; text-align: center; }
         .legal { font-size: 12px; color: #666; margin-bottom: 15px; text-align: center; }
@@ -395,6 +396,68 @@
         }
         
     </style>
+ <!-- Legal Checker Modal -->
+<div id="legalChecker" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+  <div style="background: white; width: 90%; max-width: 500px; margin: 50px auto; border-radius: 16px; padding: 20px; text-align: center;">
+    <h2 style="color: #1B5E20; margin-bottom: 20px;">Legal Checker AI</h2>
+    <p style="color: #555; margin-bottom: 20px;">Enter your state (e.g., "NC") → AI verifies THCA, THC, CBD, derivatives.</p>
+    <input type="text" id="stateInput" placeholder="State (e.g., NC, CA, CO)" style="padding: 12px; width: 80%; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; margin-bottom: 20px;">
+    <button onclick="checkLegal()" style="background: #66BB6A; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; margin-right: 10px;">Check</button>
+    <button onclick="toggleLegalChecker()" style="background: #FF9800; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer;">Close</button>
+    <div id="legalResult" style="margin-top: 20px; font-size: 16px; text-align: left; background: #f8fff8; padding: 15px; border-radius: 8px;"></div>
+  </div>
+</div>
+
+<script>
+  // Toggle Modal
+  function toggleLegalChecker() {
+    const modal = document.getElementById('legalChecker');
+    modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    if (modal.style.display === 'block') {
+      document.getElementById('map').style.display = 'none'; // Hide map temporarily
+    } else {
+      document.getElementById('map').style.display = 'block'; // Show map again
+    }
+  }
+
+  // AI Checker (Grok-Style Response)
+  function checkLegal() {
+    const state = document.getElementById('stateInput').value.toUpperCase();
+    const resultDiv = document.getElementById('legalResult');
+    if (!state) {
+      resultDiv.innerHTML = '<p style="color: #FF9800;">Please enter a state (e.g., NC).</p>';
+      return;
+    }
+
+    // Simulated AI response (free basic, premium full)
+    let response = `<p><strong>State: ${state}</strong></p>`;
+    if (state === 'NC') {
+      response += `
+        <p><strong>THCA/CBD:</strong> Legal (hemp <0.3% Δ9-THC).</p>
+        <p><strong>THC Recreational:</strong> Illegal (no adult use).</p>
+        <p><strong>Delta 8/9:</strong> Legal (hemp-derived).</p>
+        <p><strong>Recommendation:</strong> Focus on THCA flower from Hemp Hop (Charlotte). Premium for alerts on changes.</p>
+      `;
+    } else if (state === 'CA') {
+      response += `
+        <p><strong>THCA/CBD:</strong> Legal.</p>
+        <p><strong>THC Recreational:</strong> Legal (21+, 1oz limit).</p>
+        <p><strong>Delta 8/9:</strong> Legal.</p>
+        <p><strong>Recommendation:</strong> Explore Cookies in LA. Premium for personalized shop matches.</p>
+      `;
+    } else if (state === 'CO') {
+      response += `
+        <p><strong>THCA/CBD:</strong> Legal.</p>
+        <p><strong>THC Recreational:</strong> Legal (21+, 1oz limit).</p>
+        <p><strong>Delta 8/9:</strong> Legal.</p>
+        <p><strong>Recommendation:</strong> Native Roots in Denver. Premium for grow tips.</p>
+      `;
+    } else {
+      response += `<p><strong>Status:</strong> THCA/CBD legal nationwide. THC varies by state. Premium for full report.</p>`;
+    }
+    resultDiv.innerHTML = response;
+  }
+</script>   
 </head>
 <body>
 
